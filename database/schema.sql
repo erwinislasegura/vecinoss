@@ -38,6 +38,25 @@ CREATE TABLE posts (
   CONSTRAINT fk_posts_user FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB;
 
+CREATE TABLE settings (
+  setting_key VARCHAR(100) PRIMARY KEY,
+  setting_value TEXT NOT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE videos (
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(180) NOT NULL,
+  description VARCHAR(350),
+  cover_image VARCHAR(500),
+  video_url VARCHAR(1000) NOT NULL,
+  status ENUM('draft','published') NOT NULL DEFAULT 'draft',
+  published_at DATETIME NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_videos_public (status, published_at)
+) ENGINE=InnoDB;
+
 INSERT INTO users (name,email,password) VALUES
 ('Equipo VecinoSS','editor@vecinoss.cl','$2y$12$zLgzc4.Y2YWVesK5mWEXm.tEgWNvFp6dza.J8to/eMozWi112YH5.');
 
