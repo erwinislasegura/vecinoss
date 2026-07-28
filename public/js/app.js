@@ -4,6 +4,19 @@ document.querySelector('.menu-button')?.addEventListener('click', event => {
   event.currentTarget.setAttribute('aria-expanded', String(open));
 });
 
+const liveClock = document.querySelector('[data-live-clock]');
+if (liveClock) {
+  const clockValue = liveClock.querySelector('b');
+  const formatter = new Intl.DateTimeFormat('es-CL', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: 'America/Santiago' });
+  const updateClock = () => {
+    const now = new Date();
+    liveClock.dateTime = now.toISOString();
+    clockValue.textContent = formatter.format(now);
+  };
+  updateClock();
+  setInterval(updateClock, 1000);
+}
+
 const weatherWidget = document.querySelector('[data-weather-widget]');
 if (weatherWidget) {
   const weatherCodes = { 0: ['Despejado', '☀'], 1: ['Mayormente despejado', '🌤'], 2: ['Parcialmente nublado', '⛅'], 3: ['Nublado', '☁'], 45: ['Niebla', '🌫'], 48: ['Niebla', '🌫'], 51: ['Llovizna', '🌦'], 53: ['Llovizna', '🌦'], 55: ['Llovizna intensa', '🌧'], 61: ['Lluvia', '🌧'], 63: ['Lluvia', '🌧'], 65: ['Lluvia intensa', '🌧'], 80: ['Chubascos', '🌦'], 81: ['Chubascos', '🌦'], 82: ['Chubascos fuertes', '⛈'], 95: ['Tormenta', '⛈'] };
