@@ -1,7 +1,18 @@
 <?php
 $sidePosts = array_slice($posts, 0, 3);
 $latestPosts = array_slice($posts, 3, 12);
+$shareUrl = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . url('/');
+$shareTitle = 'VecinoSS — Noticias de la Provincia de San Antonio';
 ?>
+
+<aside class="home-share" aria-label="Compartir la página de inicio">
+    <span class="home-share-title">Compartir</span>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=<?= rawurlencode($shareUrl) ?>" target="_blank" rel="noopener" aria-label="Compartir en Facebook"><img src="<?= asset('images/social/facebook.svg') ?>" alt=""><b>Facebook</b></a>
+    <a href="https://twitter.com/intent/tweet?url=<?= rawurlencode($shareUrl) ?>&text=<?= rawurlencode($shareTitle) ?>" target="_blank" rel="noopener" aria-label="Compartir en X"><img src="<?= asset('images/social/x.svg') ?>" alt=""><b>X</b></a>
+    <a href="https://wa.me/?text=<?= rawurlencode($shareTitle . ' ' . $shareUrl) ?>" target="_blank" rel="noopener" aria-label="Compartir por WhatsApp"><img src="<?= asset('images/social/whatsapp.svg') ?>" alt=""><b>WhatsApp</b></a>
+    <a href="mailto:?subject=<?= rawurlencode($shareTitle) ?>&body=<?= rawurlencode($shareTitle . "\n\n" . $shareUrl) ?>" aria-label="Compartir por correo"><img src="<?= asset('images/social/email.svg') ?>" alt=""><b>Correo</b></a>
+    <button type="button" data-copy-url="<?= e($shareUrl) ?>" aria-label="Copiar enlace"><img src="<?= asset('images/social/link.svg') ?>" alt=""><b>Copiar</b></button>
+</aside>
 
 <section class="shell hero" id="inicio">
     <?php if ($featured): ?>

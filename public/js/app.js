@@ -63,14 +63,16 @@ if (weatherWidget) {
   locateVisitor();
 }
 
-document.querySelector('[data-copy-url]')?.addEventListener('click', async event => {
+document.querySelectorAll('[data-copy-url]').forEach(copyButton => copyButton.addEventListener('click', async event => {
   const button = event.currentTarget;
   try {
     await navigator.clipboard.writeText(button.dataset.copyUrl);
-    const label = button.querySelector('b'); label.textContent = '¡Copiado!';
-    setTimeout(() => { label.textContent = 'Copiar enlace'; }, 1800);
-  } catch (error) { window.prompt('Copia el enlace de la noticia:', button.dataset.copyUrl); }
-});
+    const label = button.querySelector('b');
+    const originalLabel = label.textContent;
+    label.textContent = '¡Copiado!';
+    setTimeout(() => { label.textContent = originalLabel; }, 1800);
+  } catch (error) { window.prompt('Copia este enlace:', button.dataset.copyUrl); }
+}));
 
 const embedUrl = (value, autoplay = false) => {
   try {
