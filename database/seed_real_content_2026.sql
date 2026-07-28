@@ -1,9 +1,50 @@
 USE vecinoss;
 
+-- Retira contenido demostrativo de instalaciones anteriores.
+DELETE FROM videos
+WHERE video_url IN (
+  'https://www.youtube.com/watch?v=M7lc1UVf-VE',
+  'https://www.youtube.com/watch?v=aqz-KE-bpKQ',
+  'https://youtu.be/ScMzIvxBSi4'
+);
+
+DELETE FROM posts
+WHERE slug IN (
+  'vecinos-impulsan-recuperacion-espacios-publicos',
+  'municipio-anuncia-mejoras-conectividad',
+  'clubes-locales-preparan-encuentros',
+  'agenda-cultural-musica-patrimonio',
+  'feria-local-oportunidades-emprendedores',
+  'recomendaciones-prevenir-emergencias-hogar',
+  'juntas-vecinos-actividades-vacaciones-invierno',
+  'operativo-servicios-publicos-sectores-rurales',
+  'escuelas-deportivas-talleres-gratuitos',
+  'biblioteca-local-talleres-encuentros',
+  'productores-provincia-venta-directa',
+  'simulacro-preventivo-zona-costera',
+  'municipio-invita-jornada-familiar-plaza-armas',
+  'centro-cultural-talleres-gratuitos',
+  'feria-productores-locales-fin-semana',
+  'corrida-familiar-convocatoria-todas-edades',
+  'bandas-locales-concierto-abierto-anfiteatro',
+  'biblioteca-cuentacuentos-actividades-infantiles'
+);
+
 -- 20 noticias reales de la Provincia de San Antonio.
 -- Los textos son resúmenes originales y cada registro conserva su fuente pública.
 INSERT IGNORE INTO posts (category_id,user_id,title,slug,excerpt,body,image,status,featured,published_at)
-SELECT c.id,u.id,s.title,s.slug,s.excerpt,s.body,NULL,'published',0,s.published_at
+SELECT c.id,u.id,s.title,s.slug,s.excerpt,s.body,
+CASE c.slug
+  WHEN 'actualidad-comunal' THEN 'https://images.unsplash.com/photo-1494522358652-f30e61a60313?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'cultura' THEN 'https://images.unsplash.com/photo-1488841714725-bb4c32d1ac94?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'deportes' THEN 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'salud-y-bienestar' THEN 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'emergencias' THEN 'https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'historias-de-vecinos' THEN 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'emprendedores' THEN 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'seguridad' THEN 'https://images.unsplash.com/photo-1453873531674-2151bcd01707?auto=format&fit=crop&w=1400&q=82'
+  ELSE 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=82'
+END,'published',0,s.published_at
 FROM (
   SELECT 'actualidad-comunal' category_slug,'Biblioteca Vicente Huidobro ampliará sus horarios durante agosto' title,'biblioteca-vicente-huidobro-horarios-agosto-2026' slug,'La biblioteca pública de San Antonio anunció horarios extendidos para que más vecinos puedan utilizar sus espacios durante agosto.' excerpt,'La Biblioteca Pública N°68 Vicente Huidobro informó que durante agosto ofrecerá horarios ampliados para facilitar el acceso de la comunidad a sus salas y servicios. Fuente: https://sanantonio.cl/municipalidad/noticias.html' body,'2026-07-27 15:43:00' published_at
   UNION ALL SELECT 'cultura','San Antonio en Colores vuelve para celebrar el Día de la Niñez','san-antonio-en-colores-dia-ninez-2026','La celebración familiar regresará con actividades recreativas y culturales orientadas a niñas, niños y sus familias.','La Municipalidad anunció el regreso de San Antonio en Colores como parte de la celebración del Día de la Niñez. Fuente: https://sanantonio.cl/municipalidad/noticias.html','2026-07-27 15:42:00'
@@ -31,7 +72,15 @@ JOIN users u ON u.email='editor@vecinoss.cl';
 
 -- 20 eventos y actividades reales de la agenda provincial 2026.
 INSERT IGNORE INTO posts (category_id,user_id,title,slug,excerpt,body,image,status,featured,published_at)
-SELECT c.id,u.id,s.title,s.slug,s.excerpt,s.body,NULL,'published',0,s.published_at
+SELECT c.id,u.id,s.title,s.slug,s.excerpt,s.body,
+CASE c.slug
+  WHEN 'actividades-culturales' THEN 'https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'conciertos' THEN 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'eventos-deportivos' THEN 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'ferias' THEN 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=1400&q=82'
+  WHEN 'eventos-municipales' THEN 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=82'
+  ELSE 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=82'
+END,'published',0,s.published_at
 FROM (
   SELECT 'actividades-culturales' category_slug,'Fiesta Polifónica del Elenco Coral de San Antonio' title,'evento-fiesta-polifonica-san-antonio-2026' slug,'El elenco coral presentó un concierto gratuito en el Centro Cultural San Antonio.' excerpt,'Actividad cultural confirmada por la Municipalidad de San Antonio. Fuente: https://sanantonio.cl/municipalidad/noticias.html' body,'2026-07-23 19:00:00' published_at
   UNION ALL SELECT 'conciertos','Concierto aniversario de Big Band Puerto San Antonio','evento-big-band-puerto-san-antonio-23-anos','La agrupación celebró 23 años de trayectoria con un concierto gratuito para la comunidad.','Actividad realizada en el Centro Cultural San Antonio. Fuente: https://www.youtube.com/watch?v=yqQ0ax5I72A','2026-07-25 19:00:00'
@@ -83,4 +132,3 @@ FROM (
   UNION ALL SELECT 'El Quisco despliega operativo ante efectos del sistema frontal','Equipos municipales recorren sectores afectados y coordinan ayudas.','El Quisco','Reportajes','bMvI2c5DAWk','2026-07-23 14:00:00'
 ) s
 WHERE NOT EXISTS (SELECT 1 FROM videos v WHERE v.video_url=CONCAT('https://www.youtube.com/watch?v=',s.youtube_id));
-
