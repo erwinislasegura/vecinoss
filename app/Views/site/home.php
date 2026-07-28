@@ -64,5 +64,8 @@ $latestPosts = array_slice($posts, 3, 12);
 
 <section class="shell section events" id="eventos">
     <div class="section-title"><div><small>QUÉ HACER</small><h2>Agenda y eventos</h2></div><a href="mailto:prensa@vecinoss.cl">Publicar un evento →</a></div>
-    <?php foreach ($eventPosts as $post): ?><article><div class="event-date"><b><?= e(date('d', strtotime($post['published_at']))) ?></b><span><?= e(strtoupper(date('M', strtotime($post['published_at'])))) ?></span></div><div><small><?= e($post['category_name']) ?></small><h3><a href="<?= url('/noticia/' . $post['slug']) ?>"><?= e($post['title']) ?></a></h3><p>Publicado <?= e(date_es($post['published_at'])) ?> · Provincia de San Antonio</p></div><a href="<?= url('/noticia/' . $post['slug']) ?>">→</a></article><?php endforeach; ?>
+    <?php if ($eventPosts): ?><div class="event-grid"><?php foreach ($eventPosts as $index => $post): ?><article class="event-card<?= $index===0?' event-featured':'' ?>">
+        <a class="event-image" href="<?= url('/noticia/'.$post['slug']) ?>"><img src="<?= e(post_image($post['image'])) ?>" alt=""><time class="event-date" datetime="<?= e($post['published_at']) ?>"><b><?= e(date('d',strtotime($post['published_at']))) ?></b><span><?= e(strtoupper(date('M',strtotime($post['published_at'])))) ?></span></time></a>
+        <div class="event-content"><small><?= e($post['category_name']) ?></small><h3><a href="<?= url('/noticia/'.$post['slug']) ?>"><?= e($post['title']) ?></a></h3><?php if($post['excerpt']): ?><p><?= e($post['excerpt']) ?></p><?php endif; ?><div class="event-meta"><span>Provincia de San Antonio</span><a class="more" href="<?= url('/noticia/'.$post['slug']) ?>">Ver evento →</a></div></div>
+    </article><?php endforeach; ?></div><?php else: ?><div class="empty">Pronto publicaremos nuevos eventos y panoramas locales.</div><?php endif; ?>
 </section>
