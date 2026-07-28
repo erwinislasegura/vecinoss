@@ -1,0 +1,1 @@
+<section class="not-found shell"><b>404</b><h1>No encontramos esta página</h1><p>Puede que la noticia haya cambiado de dirección.</p><a class="black-button" href="<?= url('/') ?>">Volver al inicio</a></section>
