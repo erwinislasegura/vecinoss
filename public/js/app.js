@@ -40,6 +40,27 @@ if (liveClock) {
   setInterval(updateClock, 1000);
 }
 
+const readingProgress = document.querySelector('[data-reading-progress]');
+const story = document.querySelector('.story');
+if (readingProgress && story) {
+  let ticking = false;
+  const updateReadingProgress = () => {
+    const bounds = story.getBoundingClientRect();
+    const available = Math.max(1, story.offsetHeight - window.innerHeight);
+    const travelled = Math.min(available, Math.max(0, -bounds.top));
+    readingProgress.style.width = `${(travelled / available) * 100}%`;
+    ticking = false;
+  };
+  const requestProgressUpdate = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateReadingProgress);
+  };
+  updateReadingProgress();
+  addEventListener('scroll', requestProgressUpdate, { passive: true });
+  addEventListener('resize', requestProgressUpdate, { passive: true });
+}
+
 const weatherWidget = document.querySelector('[data-weather-widget]');
 if (weatherWidget) {
   const weatherCodes = { 0: ['Despejado', '☀'], 1: ['Mayormente despejado', '🌤'], 2: ['Parcialmente nublado', '⛅'], 3: ['Nublado', '☁'], 45: ['Niebla', '🌫'], 48: ['Niebla', '🌫'], 51: ['Llovizna', '🌦'], 53: ['Llovizna', '🌦'], 55: ['Llovizna intensa', '🌧'], 61: ['Lluvia', '🌧'], 63: ['Lluvia', '🌧'], 65: ['Lluvia intensa', '🌧'], 80: ['Chubascos', '🌦'], 81: ['Chubascos', '🌦'], 82: ['Chubascos fuertes', '⛈'], 95: ['Tormenta', '⛈'] };
