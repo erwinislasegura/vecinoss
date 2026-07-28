@@ -1,6 +1,6 @@
 <div class="utility"><div class="shell"><span><?= e(date_es(date('Y-m-d H:i:s'))) ?> · Provincia de San Antonio</span><span>Edición digital</span></div></div>
 <header class="site-header">
-  <div class="shell brandbar"><button class="menu-button" aria-label="Abrir menú" aria-controls="main-menu" aria-expanded="false"><span></span><span></span><span></span></button><a href="<?= url('/') ?>" class="brand" aria-label="VecinoSS, ir al inicio"><img src="<?= url('/logo/logo.png') ?>" alt="VecinoSS"></a><a class="send" href="mailto:prensa@vecinoss.cl">Envía tu noticia <b>→</b></a></div>
+  <div class="shell brandbar"><button class="menu-button" aria-label="Abrir menú" aria-controls="main-menu" aria-expanded="false"><span></span><span></span><span></span></button><a href="<?= url('/') ?>" class="brand" aria-label="VecinoSS, ir al inicio"><img src="<?= url('/logo/logo.png') ?>" alt="VecinoSS"></a><a class="send" href="mailto:prensa@vecinoss.cl"><span class="send-full">Envía tu noticia</span><span class="send-short">Enviar</span><b>→</b></a></div>
   <nav class="main-nav" id="main-menu" aria-label="Navegación principal"><div class="shell">
     <a href="<?= url('/') ?>">Inicio</a>
     <?php foreach (array_slice($categories ?? App\Models\Category::topLevel(), 0, 6) as $navCategory): ?><?php $navHref = $navCategory['slug']==='vecinoss-tv' ? '/videos' : ($navCategory['slug']==='eventos' ? '/eventos' : '/categoria/'.$navCategory['slug']); ?><a href="<?= url($navHref) ?>"><?= e($navCategory['name']) ?></a><?php endforeach; ?>
