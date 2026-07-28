@@ -1,13 +1,16 @@
 <?php
 $shareUrl = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . url('/noticia/' . $post['slug']);
 $isEvent = ($post['parent_category_name'] ?? '') === 'Eventos' || $post['category_slug'] === 'eventos';
+$plainBody = trim(strip_tags($post['body']));
+$readingMinutes = max(1, (int) ceil(str_word_count($plainBody) / 210));
 ?>
 <article class="story<?= $isEvent ? ' event-story' : '' ?>">
+    <div class="reading-progress" aria-hidden="true"><span data-reading-progress></span></div>
     <div class="story-head shell">
         <nav class="breadcrumbs" aria-label="Migas de pan"><a href="<?= url('/') ?>">Inicio</a><span>›</span><a href="<?= $isEvent ? url('/eventos') : url('/categoria/'.$post['category_slug']) ?>"><?= e($isEvent ? 'Agenda y eventos' : $post['category_name']) ?></a></nav>
         <div class="story-heading">
             <div>
-                <small><?= e($isEvent ? 'AGENDA LOCAL · '.$post['category_name'] : $post['category_name']) ?></small>
+                <div class="story-kicker"><small><?= e($isEvent ? 'AGENDA LOCAL · '.$post['category_name'] : $post['category_name']) ?></small><span><?= $readingMinutes ?> min de lectura</span></div>
                 <h1><?= e($post['title']) ?></h1>
                 <?php if ($post['excerpt']): ?><p class="standfirst"><?= e($post['excerpt']) ?></p><?php endif; ?>
                 <div class="byline">
@@ -21,6 +24,8 @@ $isEvent = ($post['parent_category_name'] ?? '') === 'Eventos' || $post['categor
 
     <div class="story-media shell">
         <img class="article-image" src="<?= e(post_image($post['image'])) ?>" alt="<?= e($post['title']) ?>">
+        <div class="story-media-shade" aria-hidden="true"></div>
+        <span class="story-media-brand">V<span>SS</span></span>
         <?php if ($isEvent): ?><span class="story-media-label">Provincia de San Antonio</span><?php endif; ?>
     </div>
 
@@ -37,6 +42,16 @@ $isEvent = ($post['parent_category_name'] ?? '') === 'Eventos' || $post['categor
             <?php if (!empty($post['tag_names'])): ?><div class="story-tags" aria-label="Temas"><?php foreach (explode(', ', $post['tag_names']) as $tag): ?><span>#<?= e($tag) ?></span><?php endforeach; ?></div><?php endif; ?>
             <div class="story-end"><span></span><b>VecinoSS</b><p>Información local, cercana y útil para nuestra comunidad.</p></div>
         </div>
+        <aside class="story-summary">
+            <small><?= $isEvent ? 'INFORMACIÓN' : 'EN BREVE' ?></small>
+            <p><?= e($post['excerpt'] ?: 'La información más importante de nuestra provincia, explicada de forma clara y cercana.') ?></p>
+            <dl>
+                <div><dt>Sección</dt><dd><?= e($post['category_name']) ?></dd></div>
+                <div><dt>Publicado</dt><dd><?= e(date_es($post['published_at'])) ?></dd></div>
+                <div><dt>Lectura</dt><dd><?= $readingMinutes ?> min</dd></div>
+            </dl>
+            <?php if ($isEvent): ?><a href="mailto:prensa@vecinoss.cl?subject=Consulta sobre <?= rawurlencode($post['title']) ?>">Consultar actividad →</a><?php else: ?><a href="mailto:prensa@vecinoss.cl?subject=Información relacionada con <?= rawurlencode($post['title']) ?>">Aportar información →</a><?php endif; ?>
+        </aside>
     </div>
 </article>
 
