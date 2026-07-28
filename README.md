@@ -9,6 +9,8 @@ Aplicación PHP 8.1+ con arquitectura MVC y MySQL para publicar noticias locales
 3. Inicia el servidor desde la raíz usando `index.php` como router: `php -S localhost:8000 index.php`.
 4. Abre `http://localhost:8000` y accede al panel en `/admin`.
 
+Las categorías principales, subcategorías y etiquetas permiten ordenar Noticias, Comunidad, Guía Local y Eventos; VecinoSS TV incluye clasificación por comuna y formato. Para actualizar una instalación previa, ejecuta `mysql -u root -p < database/migrate_content_classification.sql`.
+
 El esquema inicial incluye tres videos de muestra publicados en **VecinoSS TV**. Para agregarlos de forma idempotente a una instalación existente, ejecuta `mysql -u root -p < database/seed_videos.sql`.
 
 El usuario inicial es `editor@vecinoss.cl` y la contraseña `Cambiar123!`. **Cámbiala antes de publicar el sitio.**
