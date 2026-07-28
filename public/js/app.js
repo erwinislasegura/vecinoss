@@ -2,6 +2,29 @@ document.querySelector('.menu-button')?.addEventListener('click', event => {
   const nav = document.querySelector('.main-nav');
   const open = nav.classList.toggle('open');
   event.currentTarget.setAttribute('aria-expanded', String(open));
+  event.currentTarget.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  document.body.classList.toggle('menu-open', open);
+});
+
+document.querySelectorAll('.main-nav a').forEach(link => link.addEventListener('click', () => {
+  const nav = document.querySelector('.main-nav');
+  const button = document.querySelector('.menu-button');
+  nav?.classList.remove('open');
+  document.body.classList.remove('menu-open');
+  button?.setAttribute('aria-expanded', 'false');
+  button?.setAttribute('aria-label', 'Abrir menú');
+}));
+
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  const nav = document.querySelector('.main-nav');
+  if (!nav?.classList.contains('open')) return;
+  nav.classList.remove('open');
+  document.body.classList.remove('menu-open');
+  const button = document.querySelector('.menu-button');
+  button?.setAttribute('aria-expanded', 'false');
+  button?.setAttribute('aria-label', 'Abrir menú');
+  button?.focus();
 });
 
 const liveClock = document.querySelector('[data-live-clock]');
@@ -115,6 +138,23 @@ document.querySelectorAll('[data-video-inline]').forEach(player => {
   const media = createVideoMedia(player.dataset.videoUrl, player.dataset.videoTitle);
   if (media) player.replaceChildren(media);
 });
+
+const videoFilters = document.querySelector('[data-video-filters]');
+if (videoFilters) {
+  const cards = [...document.querySelectorAll('[data-video-card]')];
+  const emptyState = document.querySelector('[data-video-empty]');
+  videoFilters.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
+    const filter = button.dataset.filter;
+    let visible = 0;
+    videoFilters.querySelectorAll('[data-filter]').forEach(item => item.classList.toggle('active', item === button));
+    cards.forEach(card => {
+      const show = filter === 'all' || card.dataset.format === filter;
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+    if (emptyState) emptyState.hidden = visible !== 0;
+  }));
+}
 
 const videoDialog = document.querySelector('[data-video-dialog]');
 if (videoDialog) {
