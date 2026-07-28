@@ -24,6 +24,8 @@ elseif ($path === '/admin/login' && $method === 'POST') $admin->authenticate();
 elseif ($path === '/admin/logout' && $method === 'POST') $admin->logout();
 elseif ($path === '/admin' && $method === 'GET') $admin->dashboard();
 elseif ($path === '/admin/posts' && $method === 'GET') $admin->posts();
+elseif ($path === '/admin/weather' && $method === 'GET') $admin->weather();
+elseif ($path === '/admin/weather' && $method === 'POST') $admin->saveWeather();
 elseif ($path === '/admin/posts/create' && $method === 'GET') $admin->create();
 elseif ($path === '/admin/posts' && $method === 'POST') $admin->store();
 elseif (preg_match('#^/admin/posts/(\d+)/edit$#', $path, $m) && $method === 'GET') $admin->edit((int) $m[1]);
