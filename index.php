@@ -38,5 +38,6 @@ elseif (preg_match('#^/admin/posts/(\d+)/edit$#', $path, $m) && $method === 'GET
 elseif (preg_match('#^/admin/posts/(\d+)$#', $path, $m) && $method === 'POST' && ($_POST['_method'] ?? '') === 'DELETE') $admin->destroy((int) $m[1]);
 elseif (preg_match('#^/admin/posts/(\d+)$#', $path, $m) && $method === 'POST') $admin->store((int) $m[1]);
 elseif (preg_match('#^/noticia/([a-z0-9-]+)$#', $path, $m) && $method === 'GET') $site->article($m[1]);
+elseif (preg_match('#^/video/(\d+)$#', $path, $m) && $method === 'GET') $site->video((int) $m[1]);
 elseif (preg_match('#^/categoria/([a-z0-9-]+)$#', $path, $m) && $method === 'GET') $site->category($m[1]);
 else { http_response_code(404); $site->notFound(); }

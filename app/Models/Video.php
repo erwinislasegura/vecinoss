@@ -30,6 +30,14 @@ final class Video
         return $statement->fetch() ?: null;
     }
 
+    public static function findPublished(int $id): ?array
+    {
+        self::ensureTable();
+        $statement = Database::connection()->prepare("SELECT * FROM videos WHERE id=? AND status='published' AND published_at<=CURRENT_TIMESTAMP LIMIT 1");
+        $statement->execute([$id]);
+        return $statement->fetch() ?: null;
+    }
+
     public static function save(array $data, ?int $id = null): void
     {
         self::ensureTable();
