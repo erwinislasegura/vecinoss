@@ -1,0 +1,6 @@
+<section class="shell hero">
+<?php if ($featured): ?><article class="lead"><img src="<?= e(post_image($featured['image'])) ?>" alt=""><div class="lead-card"><small><?= e($featured['category_name']) ?></small><h1><a href="<?= url('/noticia/'.$featured['slug']) ?>"><?= e($featured['title']) ?></a></h1><p><?= e($featured['excerpt']) ?></p><a class="more" href="<?= url('/noticia/'.$featured['slug']) ?>">Leer noticia →</a></div></article><?php endif; ?>
+<aside class="side-stories"><?php foreach (array_slice($posts,0,3) as $post): ?><article><img src="<?= e(post_image($post['image'])) ?>" alt=""><div><small><?= e($post['category_name']) ?></small><h2><a href="<?= url('/noticia/'.$post['slug']) ?>"><?= e($post['title']) ?></a></h2><a class="more" href="<?= url('/noticia/'.$post['slug']) ?>">Ver más →</a></div></article><?php endforeach; ?></aside>
+</section>
+<section class="shell section"><div class="section-title"><div><small>ACTUALIDAD</small><h2>Últimas noticias</h2></div><a href="#noticias">Todas las noticias →</a></div><div class="news-grid" id="noticias"><?php foreach (array_slice($posts,3) as $post): ?><?php require __DIR__.'/../partials/card.php'; ?><?php endforeach; ?></div></section>
+
