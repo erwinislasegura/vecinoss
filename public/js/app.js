@@ -59,46 +59,59 @@ document.querySelector('[data-copy-url]')?.addEventListener('click', async event
   } catch (error) { window.prompt('Copia el enlace de la noticia:', button.dataset.copyUrl); }
 });
 
+const embedUrl = (value, autoplay = false) => {
+  try {
+    const url = new URL(value);
+    const host = url.hostname.replace(/^www\./, '');
+    const play = autoplay ? '?autoplay=1' : '';
+    let id = '';
+    if (host === 'youtu.be') id = url.pathname.split('/')[1] || '';
+    if (host === 'youtube.com' || host.endsWith('.youtube.com')) id = url.searchParams.get('v') || url.pathname.match(/^\/(?:shorts|embed)\/([^/]+)/)?.[1] || '';
+    if (id && /^[a-zA-Z0-9_-]{6,}$/.test(id)) return `https://www.youtube-nocookie.com/embed/${id}${play}`;
+    if (host === 'vimeo.com' || host.endsWith('.vimeo.com')) {
+      id = url.pathname.match(/\/(?:video\/)?(\d+)/)?.[1] || '';
+      if (id) return `https://player.vimeo.com/video/${id}${play}`;
+    }
+    if (host === 'dai.ly') id = url.pathname.split('/')[1] || '';
+    if (host === 'dailymotion.com' || host.endsWith('.dailymotion.com')) id = url.pathname.match(/\/video\/([^_/?]+)/)?.[1] || '';
+    if (id && /^[a-zA-Z0-9]+$/.test(id)) return `https://www.dailymotion.com/embed/video/${id}${play}`;
+  } catch (error) { return null; }
+  return null;
+};
+
+const createVideoMedia = (source, title, autoplay = false) => {
+  const embedded = embedUrl(source, autoplay);
+  const directVideo = /\.(?:mp4|webm|ogg)(?:[?#].*)?$/i.test(source);
+  if (!embedded && !directVideo) return null;
+  const media = document.createElement(embedded ? 'iframe' : 'video');
+  media.src = embedded || source;
+  media.title = title;
+  if (embedded) {
+    media.allow = 'autoplay; fullscreen; picture-in-picture';
+    media.allowFullscreen = true;
+  } else {
+    media.controls = true;
+    media.autoplay = autoplay;
+  }
+  return media;
+};
+
+document.querySelectorAll('[data-video-inline]').forEach(player => {
+  const media = createVideoMedia(player.dataset.videoUrl, player.dataset.videoTitle);
+  if (media) player.replaceChildren(media);
+});
+
 const videoDialog = document.querySelector('[data-video-dialog]');
 if (videoDialog) {
   const player = videoDialog.querySelector('[data-video-player]');
-  const embedUrl = value => {
-    try {
-      const url = new URL(value);
-      const host = url.hostname.replace(/^www\./, '');
-      let id = '';
-      if (host === 'youtu.be') id = url.pathname.split('/')[1] || '';
-      if (host === 'youtube.com' || host.endsWith('.youtube.com')) id = url.searchParams.get('v') || url.pathname.match(/^\/(?:shorts|embed)\/([^/]+)/)?.[1] || '';
-      if (id && /^[a-zA-Z0-9_-]{6,}$/.test(id)) return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
-      if (host === 'vimeo.com' || host.endsWith('.vimeo.com')) {
-        id = url.pathname.match(/\/(?:video\/)?(\d+)/)?.[1] || '';
-        if (id) return `https://player.vimeo.com/video/${id}?autoplay=1`;
-      }
-      if (host === 'dai.ly') id = url.pathname.split('/')[1] || '';
-      if (host === 'dailymotion.com' || host.endsWith('.dailymotion.com')) id = url.pathname.match(/\/video\/([^_/?]+)/)?.[1] || '';
-      if (id && /^[a-zA-Z0-9]+$/.test(id)) return `https://www.dailymotion.com/embed/video/${id}?autoplay=1`;
-    } catch (error) { return null; }
-    return null;
-  };
   const playVideo = button => {
     const source = button.dataset.videoUrl;
-    const embedded = embedUrl(source);
-    const directVideo = /\.(?:mp4|webm|ogg)(?:[?#].*)?$/i.test(source);
-    if (!embedded && !directVideo) {
+    const media = createVideoMedia(source, button.dataset.videoTitle, true);
+    if (!media) {
       window.open(source, '_blank', 'noopener,noreferrer');
       return;
     }
     player.replaceChildren();
-    const media = document.createElement(embedded ? 'iframe' : 'video');
-    media.src = embedded || source;
-    media.title = button.dataset.videoTitle;
-    if (embedded) {
-      media.allow = 'autoplay; fullscreen; picture-in-picture';
-      media.allowFullscreen = true;
-    } else {
-      media.controls = true;
-      media.autoplay = true;
-    }
     player.append(media);
     videoDialog.querySelector('[data-video-dialog-title]').textContent = button.dataset.videoTitle;
     videoDialog.showModal();

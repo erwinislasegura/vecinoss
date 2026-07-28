@@ -43,9 +43,10 @@ $eventPosts = array_slice(array_merge($posts, $posts), 0, 4);
 <?php if ($videos): ?><section class="dark-section" id="tv"><div class="shell section">
     <div class="section-title"><div><small>EN PANTALLA</small><h2>VecinoSS TV</h2></div></div>
     <div class="video-grid">
-        <?php foreach ($videos as $video): ?><article><a class="video-cover" href="<?= url('/video/'.$video['id']) ?>"><img src="<?= e(post_image($video['cover_image'])) ?>" alt="Portada de <?= e($video['title']) ?>"><span>▶</span></a><small>VECINOSS TV</small><h3><a href="<?= url('/video/'.$video['id']) ?>"><?= e($video['title']) ?></a></h3><?php if ($video['description']): ?><p><?= e($video['description']) ?></p><?php endif; ?><a class="more" href="<?= url('/video/'.$video['id']) ?>">Ver contenido →</a></article><?php endforeach; ?>
+        <?php foreach ($videos as $video): ?><article><button class="video-cover" type="button" data-video-url="<?= e($video['video_url']) ?>" data-video-title="<?= e($video['title']) ?>" aria-label="Reproducir <?= e($video['title']) ?>"><img src="<?= e(post_image($video['cover_image'])) ?>" alt="Portada de <?= e($video['title']) ?>"><span>▶</span></button><small>VECINOSS TV</small><h3><a href="<?= url('/video/'.$video['id']) ?>"><?= e($video['title']) ?></a></h3><?php if ($video['description']): ?><p><?= e($video['description']) ?></p><?php endif; ?><a class="more" href="<?= url('/video/'.$video['id']) ?>">Ver contenido →</a></article><?php endforeach; ?>
     </div>
 </div></section>
+<dialog class="video-dialog" data-video-dialog><button class="video-dialog-close" type="button" aria-label="Cerrar video" data-video-close>×</button><h2 data-video-dialog-title></h2><div class="video-player" data-video-player></div></dialog>
 <?php endif; ?>
 
 <section class="shell section" id="comunidad">
