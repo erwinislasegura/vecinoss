@@ -1,7 +1,6 @@
 <?php
 $sidePosts = array_slice($posts, 0, 3);
 $latestPosts = array_slice($posts, 3, 8);
-$videoPosts = array_slice(array_merge($posts, $posts), 0, 3);
 $businessPosts = array_slice(array_merge(array_reverse($posts), $posts), 0, 3);
 $eventPosts = array_slice(array_merge($posts, $posts), 0, 4);
 ?>
@@ -41,12 +40,14 @@ $eventPosts = array_slice(array_merge($posts, $posts), 0, 4);
     <div class="news-grid"><?php foreach ($latestPosts as $post) require __DIR__ . '/../partials/card.php'; ?></div>
 </section>
 
-<section class="dark-section" id="tv"><div class="shell section">
-    <div class="section-title"><div><small>EN PANTALLA</small><h2>VecinoSS TV</h2></div><div class="filter-buttons"><button class="active">Últimos</button><button>Reportajes</button><button>Comunidad</button></div></div>
+<?php if ($videos): ?><section class="dark-section" id="tv"><div class="shell section">
+    <div class="section-title"><div><small>EN PANTALLA</small><h2>VecinoSS TV</h2></div></div>
     <div class="video-grid">
-        <?php foreach ($videoPosts as $post): ?><article><a class="video-cover" href="<?= url('/noticia/' . $post['slug']) ?>"><img src="<?= e(post_image($post['image'])) ?>" alt=""><span>▶</span></a><small><?= e($post['category_name']) ?></small><h3><a href="<?= url('/noticia/' . $post['slug']) ?>"><?= e($post['title']) ?></a></h3><a class="more" href="<?= url('/noticia/' . $post['slug']) ?>">Ver contenido →</a></article><?php endforeach; ?>
+        <?php foreach ($videos as $video): ?><article><button class="video-cover" type="button" data-video-url="<?= e($video['video_url']) ?>" data-video-title="<?= e($video['title']) ?>"><img src="<?= e(post_image($video['cover_image'])) ?>" alt="Portada de <?= e($video['title']) ?>"><span>▶</span></button><small>VECINOSS TV</small><h3><button class="video-title-button" type="button" data-video-url="<?= e($video['video_url']) ?>" data-video-title="<?= e($video['title']) ?>"><?= e($video['title']) ?></button></h3><?php if ($video['description']): ?><p><?= e($video['description']) ?></p><?php endif; ?><button class="more video-play-button" type="button" data-video-url="<?= e($video['video_url']) ?>" data-video-title="<?= e($video['title']) ?>">Ver contenido →</button></article><?php endforeach; ?>
     </div>
 </div></section>
+<dialog class="video-dialog" data-video-dialog><button class="video-dialog-close" type="button" aria-label="Cerrar video" data-video-close>×</button><h2 data-video-dialog-title></h2><div class="video-player" data-video-player></div></dialog>
+<?php endif; ?>
 
 <section class="shell section" id="comunidad">
     <div class="section-title"><div><small>LA VOZ DE LOS BARRIOS</small><h2>Comunidad</h2></div><a href="<?= url('/categoria/comunidad') ?>">Ver la sección →</a></div>

@@ -25,9 +25,26 @@ if (weatherWidget) {
     } catch (error) { weatherWidget.querySelector('[data-weather-description]').textContent = 'No fue posible actualizar el tiempo'; }
   };
   const fallback = () => showWeather(weatherWidget.dataset.latitude, weatherWidget.dataset.longitude, weatherWidget.dataset.fallbackName);
+  const showVisitorWeather = async ({ latitude, longitude }) => {
+    const coordinates = `${Number(latitude).toFixed(2)}, ${Number(longitude).toFixed(2)}`;
+    await showWeather(latitude, longitude, `Ubicación actual (${coordinates})`);
+    try {
+      const endpoint = new URL('https://api.bigdatacloud.net/data/reverse-geocode-client');
+      endpoint.search = new URLSearchParams({ latitude, longitude, localityLanguage: 'es' });
+      const response = await fetch(endpoint);
+      if (!response.ok) throw new Error('Reverse geocoding request failed');
+      const place = await response.json();
+      const locality = place.locality || place.city || place.localityInfo?.administrative?.[3]?.name;
+      const region = place.principalSubdivision;
+      const locationName = [locality, region].filter((value, index, values) => value && values.indexOf(value) === index).join(', ');
+      if (locationName) weatherWidget.querySelector('[data-weather-location]').textContent = locationName;
+    } catch (error) {
+      // Las coordenadas visibles siguen identificando el lugar si el geocodificador no responde.
+    }
+  };
   const locateVisitor = () => {
     if (!navigator.geolocation) return fallback();
-    navigator.geolocation.getCurrentPosition(position => showWeather(position.coords.latitude, position.coords.longitude, 'Tu ubicación actual'), fallback, { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 });
+    navigator.geolocation.getCurrentPosition(position => showVisitorWeather(position.coords), fallback, { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 });
   };
   weatherWidget.querySelector('[data-weather-locate]').addEventListener('click', locateVisitor);
   locateVisitor();
@@ -41,3 +58,54 @@ document.querySelector('[data-copy-url]')?.addEventListener('click', async event
     setTimeout(() => { label.textContent = 'Copiar enlace'; }, 1800);
   } catch (error) { window.prompt('Copia el enlace de la noticia:', button.dataset.copyUrl); }
 });
+
+const videoDialog = document.querySelector('[data-video-dialog]');
+if (videoDialog) {
+  const player = videoDialog.querySelector('[data-video-player]');
+  const embedUrl = value => {
+    try {
+      const url = new URL(value);
+      const host = url.hostname.replace(/^www\./, '');
+      let id = '';
+      if (host === 'youtu.be') id = url.pathname.split('/')[1] || '';
+      if (host === 'youtube.com' || host.endsWith('.youtube.com')) id = url.searchParams.get('v') || url.pathname.match(/^\/(?:shorts|embed)\/([^/]+)/)?.[1] || '';
+      if (id && /^[a-zA-Z0-9_-]{6,}$/.test(id)) return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+      if (host === 'vimeo.com' || host.endsWith('.vimeo.com')) {
+        id = url.pathname.match(/\/(?:video\/)?(\d+)/)?.[1] || '';
+        if (id) return `https://player.vimeo.com/video/${id}?autoplay=1`;
+      }
+      if (host === 'dai.ly') id = url.pathname.split('/')[1] || '';
+      if (host === 'dailymotion.com' || host.endsWith('.dailymotion.com')) id = url.pathname.match(/\/video\/([^_/?]+)/)?.[1] || '';
+      if (id && /^[a-zA-Z0-9]+$/.test(id)) return `https://www.dailymotion.com/embed/video/${id}?autoplay=1`;
+    } catch (error) { return null; }
+    return null;
+  };
+  const playVideo = button => {
+    const source = button.dataset.videoUrl;
+    const embedded = embedUrl(source);
+    const directVideo = /\.(?:mp4|webm|ogg)(?:[?#].*)?$/i.test(source);
+    if (!embedded && !directVideo) {
+      window.open(source, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    player.replaceChildren();
+    const media = document.createElement(embedded ? 'iframe' : 'video');
+    media.src = embedded || source;
+    media.title = button.dataset.videoTitle;
+    if (embedded) {
+      media.allow = 'autoplay; fullscreen; picture-in-picture';
+      media.allowFullscreen = true;
+    } else {
+      media.controls = true;
+      media.autoplay = true;
+    }
+    player.append(media);
+    videoDialog.querySelector('[data-video-dialog-title]').textContent = button.dataset.videoTitle;
+    videoDialog.showModal();
+  };
+  document.querySelectorAll('[data-video-url]').forEach(button => button.addEventListener('click', () => playVideo(button)));
+  const closeVideo = () => { videoDialog.close(); player.replaceChildren(); };
+  videoDialog.querySelector('[data-video-close]').addEventListener('click', closeVideo);
+  videoDialog.addEventListener('click', event => { if (event.target === videoDialog) closeVideo(); });
+  videoDialog.addEventListener('close', () => player.replaceChildren());
+}
