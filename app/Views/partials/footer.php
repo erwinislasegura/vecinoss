@@ -1,0 +1,3 @@
+<section class="contact-strip"><div class="shell"><div><small>PARTICIPA</small><h2>La noticia también<br>la construyes tú.</h2></div><p>¿Tienes una denuncia, actividad o historia de tu barrio? Queremos conocerla.</p><a class="black-button" href="mailto:prensa@vecinoss.cl">Contactar a prensa →</a></div></section>
+<footer><div class="shell"><img src="<?= url('/logo/logo.png') ?>" alt="VecinoSS"><div><a href="<?= url('/') ?>">Inicio</a><a href="mailto:prensa@vecinoss.cl">Contacto</a><a href="<?= url('/admin') ?>">Administración</a></div><span>© <?= date('Y') ?> VecinoSS<br>Provincia de San Antonio</span></div></footer>
+

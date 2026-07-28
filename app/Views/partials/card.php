@@ -1,0 +1,2 @@
+<article class="news-card"><a href="<?= url('/noticia/'.$post['slug']) ?>"><img src="<?= e(post_image($post['image'])) ?>" alt=""></a><small><?= e($post['category_name']) ?></small><h3><a href="<?= url('/noticia/'.$post['slug']) ?>"><?= e($post['title']) ?></a></h3><time><?= e(date_es($post['published_at'])) ?></time><a class="more" href="<?= url('/noticia/'.$post['slug']) ?>">Leer más →</a></article>
+
