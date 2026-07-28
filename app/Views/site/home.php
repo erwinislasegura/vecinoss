@@ -59,9 +59,9 @@ $eventPosts = array_slice(array_merge($posts, $posts), 0, 4);
 </section>
 
 <section class="business-section" id="guia"><div class="shell section">
-    <div class="section-title"><div><small>DATOS Y EMPRENDIMIENTO</small><h2>Guía local</h2></div><a href="<?= url('/categoria/emprendimiento') ?>">Explorar guía →</a></div>
+    <div class="section-title"><div><small>DATOS Y EMPRENDIMIENTO</small><h2>Guía local</h2></div><a href="<?= url('/categoria/guia-local') ?>">Explorar guía →</a></div>
     <div class="business-grid"><?php foreach ($businessPosts as $post): ?><article><img src="<?= e(post_image($post['image'])) ?>" alt=""><small><?= e($post['category_name']) ?></small><h3><a href="<?= url('/noticia/' . $post['slug']) ?>"><?= e($post['title']) ?></a></h3><p><?= e($post['excerpt']) ?></p><a class="more" href="<?= url('/noticia/' . $post['slug']) ?>">Conocer más →</a></article><?php endforeach; ?></div>
-    <nav class="guide-buttons" aria-label="Categorías de guía"><a href="<?= url('/categoria/emprendimiento') ?>">Gastronomía <b>→</b></a><a href="<?= url('/categoria/emprendimiento') ?>">Comercio <b>→</b></a><a href="<?= url('/categoria/cultura') ?>">Turismo <b>→</b></a><a href="<?= url('/categoria/deportes') ?>">Deportes <b>→</b></a><a href="<?= url('/categoria/comunidad') ?>">Servicios <b>→</b></a></nav>
+    <nav class="guide-buttons" aria-label="Categorías de guía"><a href="<?= url('/categoria/restaurantes') ?>">Gastronomía <b>→</b></a><a href="<?= url('/categoria/comercios') ?>">Comercio <b>→</b></a><a href="<?= url('/categoria/turismo') ?>">Turismo <b>→</b></a><a href="<?= url('/categoria/deportes') ?>">Deportes <b>→</b></a><a href="<?= url('/categoria/servicios') ?>">Servicios <b>→</b></a></nav>
 </div></section>
 
 <section class="shell section events" id="eventos">
