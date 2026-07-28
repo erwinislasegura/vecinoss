@@ -7,6 +7,8 @@ use App\Core\Database;
 
 final class Video
 {
+    public const COMMUNES = ['San Antonio','Cartagena','El Tabo','El Quisco','Algarrobo','Santo Domingo'];
+    public const FORMATS = ['Entrevistas','Reportajes','Crónicas','Transmisiones en vivo'];
     public static function published(int $limit = 6): array
     {
         self::ensureTable();
@@ -41,12 +43,12 @@ final class Video
     public static function save(array $data, ?int $id = null): void
     {
         self::ensureTable();
-        $values = [$data['title'], $data['description'], $data['cover_image'], $data['video_url'], $data['status'], $data['published_at']];
+        $values = [$data['title'], $data['description'], $data['commune'], $data['format'], $data['cover_image'], $data['video_url'], $data['status'], $data['published_at']];
         if ($id) {
             $values[] = $id;
-            $sql = 'UPDATE videos SET title=?,description=?,cover_image=?,video_url=?,status=?,published_at=? WHERE id=?';
+            $sql = 'UPDATE videos SET title=?,description=?,commune=?,format=?,cover_image=?,video_url=?,status=?,published_at=? WHERE id=?';
         } else {
-            $sql = 'INSERT INTO videos(title,description,cover_image,video_url,status,published_at) VALUES(?,?,?,?,?,?)';
+            $sql = 'INSERT INTO videos(title,description,commune,format,cover_image,video_url,status,published_at) VALUES(?,?,?,?,?,?,?,?)';
         }
         Database::connection()->prepare($sql)->execute($values);
     }
@@ -59,6 +61,6 @@ final class Video
 
     private static function ensureTable(): void
     {
-        Database::connection()->exec("CREATE TABLE IF NOT EXISTS videos (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(180) NOT NULL, description VARCHAR(350), cover_image VARCHAR(500), video_url VARCHAR(1000) NOT NULL, status ENUM('draft','published') NOT NULL DEFAULT 'draft', published_at DATETIME NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, INDEX idx_videos_public (status, published_at)) ENGINE=InnoDB");
+        Database::connection()->exec("CREATE TABLE IF NOT EXISTS videos (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, title VARCHAR(180) NOT NULL, description LONGTEXT, commune VARCHAR(40) NOT NULL DEFAULT 'San Antonio', format VARCHAR(40) NOT NULL DEFAULT 'Reportajes', cover_image VARCHAR(500), video_url VARCHAR(1000) NOT NULL, status ENUM('draft','published') NOT NULL DEFAULT 'draft', published_at DATETIME NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, INDEX idx_videos_public (status, published_at)) ENGINE=InnoDB");
     }
 }

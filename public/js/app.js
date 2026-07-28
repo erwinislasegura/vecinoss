@@ -122,3 +122,18 @@ if (videoDialog) {
   videoDialog.addEventListener('click', event => { if (event.target === videoDialog) closeVideo(); });
   videoDialog.addEventListener('close', () => player.replaceChildren());
 }
+
+document.querySelectorAll('[data-rich-editor]').forEach(editor => {
+  const canvas = editor.querySelector('.rich-canvas');
+  const source = editor.querySelector('.rich-source');
+  const sync = () => { source.value = canvas.innerHTML; };
+  editor.querySelectorAll('[data-command]').forEach(button => button.addEventListener('click', () => {
+    canvas.focus();
+    let value = button.dataset.value || null;
+    if (button.dataset.command === 'createLink') value = window.prompt('Dirección del enlace (https://…)');
+    if (button.dataset.command !== 'createLink' || value) document.execCommand(button.dataset.command, false, value);
+    sync();
+  }));
+  canvas.addEventListener('input', sync);
+  editor.closest('form')?.addEventListener('submit', sync);
+});
