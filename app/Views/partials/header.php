@@ -6,5 +6,9 @@
     <?php foreach (array_slice($categories ?? App\Models\Category::topLevel(), 0, 6) as $navCategory): ?><a href="<?= url('/categoria/'.$navCategory['slug']) ?>"><?= e($navCategory['name']) ?></a><?php endforeach; ?>
   </div></nav>
 </header>
-<div class="ticker"><div class="shell"><b>AHORA</b><span>VecinoSS informa: la actualidad local, cerca de ti.</span><time><?= date('H:i') ?></time></div></div>
-
+<?php $tickerPosts = $tickerPosts ?? App\Models\Post::publishedToday(); ?>
+<div class="ticker" aria-label="Últimas noticias del día"><div class="shell">
+  <b>AHORA</b>
+  <div class="ticker-window"><?php if ($tickerPosts): ?><div class="ticker-track"><?php for ($copy=0;$copy<2;$copy++): ?><div class="ticker-items" <?= $copy?'aria-hidden="true"':'' ?>><?php foreach($tickerPosts as $tickerPost): ?><a href="<?= url('/noticia/'.$tickerPost['slug']) ?>"><?= e($tickerPost['title']) ?></a><?php endforeach; ?></div><?php endfor; ?></div><?php else: ?><span class="ticker-empty">VecinoSS informa: la actualidad local, cerca de ti.</span><?php endif; ?></div>
+  <time class="ticker-clock" data-live-clock datetime="<?= date('c') ?>"><span aria-hidden="true"></span><b><?= date('H:i') ?></b></time>
+</div></div>

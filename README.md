@@ -13,6 +13,8 @@ Las categorías principales, subcategorías y etiquetas permiten ordenar Noticia
 
 El esquema inicial incluye tres videos de muestra publicados en **VecinoSS TV**. Para agregarlos de forma idempotente a una instalación existente, ejecuta `mysql -u root -p < database/seed_videos.sql`.
 
+El panel incluye un módulo independiente de **Agenda y eventos**. El esquema nuevo incorpora seis eventos de ejemplo; para agregarlos a una instalación existente ejecuta `mysql -u root -p < database/seed_events.sql`.
+
 El usuario inicial es `editor@vecinoss.cl` y la contraseña `Cambiar123!`. **Cámbiala antes de publicar el sitio.**
 
 ## Estructura
