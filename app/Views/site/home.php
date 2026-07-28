@@ -25,6 +25,17 @@ $eventPosts = array_slice(array_merge($posts, $posts), 0, 4);
     </aside>
 </section>
 
+<?php if (($weather['weather_enabled'] ?? '0') === '1'): ?>
+<section class="weather-section" aria-labelledby="weather-title">
+    <div class="shell weather-widget" data-weather-widget data-latitude="<?= e($weather['weather_fallback_latitude']) ?>" data-longitude="<?= e($weather['weather_fallback_longitude']) ?>" data-fallback-name="<?= e($weather['weather_fallback_name']) ?>">
+        <div class="weather-heading"><small>PRONÓSTICO LOCAL</small><h2 id="weather-title"><?= e($weather['weather_title']) ?></h2><p data-weather-location><?= e($weather['weather_fallback_name']) ?></p></div>
+        <div class="weather-current" aria-live="polite"><span class="weather-icon" data-weather-icon>◌</span><div><b data-weather-temperature>--°</b><span data-weather-description>Consultando el tiempo…</span></div></div>
+        <dl class="weather-details"><div><dt>Sensación</dt><dd data-weather-apparent>--°</dd></div><div><dt>Humedad</dt><dd data-weather-humidity>--%</dd></div><div><dt>Viento</dt><dd data-weather-wind>-- km/h</dd></div></dl>
+        <button class="weather-location-button" type="button" data-weather-locate>⌖ Usar mi ubicación</button>
+    </div>
+</section>
+<?php endif; ?>
+
 <section class="shell section" id="noticias">
     <div class="section-title"><div><small>ACTUALIDAD</small><h2>Últimas noticias</h2></div><div class="category-buttons"><?php foreach ($categories as $category): ?><a href="<?= url('/categoria/' . $category['slug']) ?>"><?= e($category['name']) ?></a><?php endforeach; ?></div></div>
     <div class="news-grid"><?php foreach ($latestPosts as $post) require __DIR__ . '/../partials/card.php'; ?></div>

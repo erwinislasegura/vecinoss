@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 namespace App\Controllers;
-use App\Core\{Auth,Controller,Csrf,Database}; use App\Models\{Category,Post};
+use App\Core\{Auth,Controller,Csrf,Database}; use App\Models\{Category,Post,Setting};
 final class AdminController extends Controller
 {
     public function login(): void { if(Auth::check())$this->redirect('/admin'); $this->render('admin/login',['title'=>'Acceso editorial','error'=>null],'auth'); }
@@ -9,6 +9,8 @@ final class AdminController extends Controller
     public function logout(): void { Csrf::verify(); Auth::logout(); $this->redirect('/'); }
     public function dashboard(): void { Auth::requireLogin(); $db=Database::connection(); $stats=['posts'=>(int)$db->query('SELECT COUNT(*) FROM posts')->fetchColumn(),'published'=>(int)$db->query("SELECT COUNT(*) FROM posts WHERE status='published'")->fetchColumn(),'categories'=>(int)$db->query('SELECT COUNT(*) FROM categories')->fetchColumn()]; $this->render('admin/dashboard',['title'=>'Panel editorial','stats'=>$stats,'posts'=>array_slice(Post::allAdmin(),0,6)],'admin'); }
     public function posts(): void { Auth::requireLogin(); $this->render('admin/posts/index',['title'=>'Noticias','posts'=>Post::allAdmin()],'admin'); }
+    public function weather(): void { Auth::requireLogin(); $this->render('admin/weather',['title'=>'Configuración del tiempo','weather'=>Setting::weather(),'error'=>null],'admin'); }
+    public function saveWeather(): void { Auth::requireLogin(); Csrf::verify(); $latitude=filter_var($_POST['weather_fallback_latitude']??'',FILTER_VALIDATE_FLOAT); $longitude=filter_var($_POST['weather_fallback_longitude']??'',FILTER_VALIDATE_FLOAT); if($latitude===false||$longitude===false||$latitude < -90||$latitude > 90||$longitude < -180||$longitude > 180){$this->render('admin/weather',['title'=>'Configuración del tiempo','weather'=>$_POST,'error'=>'Ingresa coordenadas válidas para la ubicación de respaldo.'],'admin');return;} Setting::saveWeather(['weather_enabled'=>isset($_POST['weather_enabled'])?'1':'0','weather_title'=>trim($_POST['weather_title']??'')?:'El tiempo en tu comuna','weather_fallback_name'=>trim($_POST['weather_fallback_name']??'')?:'San Antonio','weather_fallback_latitude'=>(string)$latitude,'weather_fallback_longitude'=>(string)$longitude]); $_SESSION['flash']='Configuración del tiempo guardada.';$this->redirect('/admin/weather'); }
     public function create(): void { Auth::requireLogin(); $this->form(null); }
     public function edit(int $id): void { Auth::requireLogin(); $this->form(Post::find($id)); }
     private function form(?array $post): void { $this->render('admin/posts/form',['title'=>$post?'Editar noticia':'Nueva noticia','post'=>$post,'categories'=>Category::all(),'error'=>null],'admin'); }

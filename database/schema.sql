@@ -38,6 +38,12 @@ CREATE TABLE posts (
   CONSTRAINT fk_posts_user FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB;
 
+CREATE TABLE settings (
+  setting_key VARCHAR(100) PRIMARY KEY,
+  setting_value TEXT NOT NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
 INSERT INTO users (name,email,password) VALUES
 ('Equipo VecinoSS','editor@vecinoss.cl','$2y$12$zLgzc4.Y2YWVesK5mWEXm.tEgWNvFp6dza.J8to/eMozWi112YH5.');
 
