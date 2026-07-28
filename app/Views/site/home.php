@@ -50,7 +50,7 @@ $shareTitle = 'VecinoSS — Noticias de la Provincia de San Antonio';
 </section>
 
 <?php if ($videos): ?><section class="dark-section" id="tv"><div class="shell section">
-    <div class="section-title"><div><small>EN PANTALLA</small><h2>VecinoSS TV</h2></div></div>
+    <div class="section-title"><div><small>EN PANTALLA</small><h2>VecinoSS TV</h2></div><a href="<?= url('/videos') ?>">Ver todos los videos →</a></div>
     <div class="video-grid">
         <?php foreach ($videos as $video): ?><article><button class="video-cover" type="button" data-video-url="<?= e($video['video_url']) ?>" data-video-title="<?= e($video['title']) ?>" aria-label="Reproducir <?= e($video['title']) ?>"><img src="<?= e(post_image($video['cover_image'])) ?>" alt="Portada de <?= e($video['title']) ?>"><span>▶</span></button><small>VECINOSS TV</small><h3><a href="<?= url('/video/'.$video['id']) ?>"><?= e($video['title']) ?></a></h3><?php if ($video['description']): ?><p><?= str_contains($video['description'], '<') ? $video['description'] : e($video['description']) ?></p><?php endif; ?><a class="more" href="<?= url('/video/'.$video['id']) ?>">Ver contenido →</a></article><?php endforeach; ?>
     </div>
@@ -74,7 +74,7 @@ $shareTitle = 'VecinoSS — Noticias de la Provincia de San Antonio';
 </div></section>
 
 <section class="shell section events" id="eventos">
-    <div class="section-title"><div><small>QUÉ HACER</small><h2>Agenda y eventos</h2></div><a href="mailto:prensa@vecinoss.cl">Publicar un evento →</a></div>
+    <div class="section-title"><div><small>QUÉ HACER</small><h2>Agenda y eventos</h2></div><a href="<?= url('/eventos') ?>">Ver agenda completa →</a></div>
     <?php if ($eventPosts): ?><div class="event-grid"><?php foreach ($eventPosts as $index => $post): ?><article class="event-card<?= $index===0?' event-featured':'' ?>">
         <a class="event-image" href="<?= url('/noticia/'.$post['slug']) ?>"><img src="<?= e(post_image($post['image'])) ?>" alt=""><time class="event-date" datetime="<?= e($post['published_at']) ?>"><b><?= e(date('d',strtotime($post['published_at']))) ?></b><span><?= e(strtoupper(date('M',strtotime($post['published_at'])))) ?></span></time></a>
         <div class="event-content"><small><?= e($post['category_name']) ?></small><h3><a href="<?= url('/noticia/'.$post['slug']) ?>"><?= e($post['title']) ?></a></h3><?php if($post['excerpt']): ?><p><?= e($post['excerpt']) ?></p><?php endif; ?><div class="event-meta"><span>Provincia de San Antonio</span><a class="more" href="<?= url('/noticia/'.$post['slug']) ?>">Ver evento →</a></div></div>
