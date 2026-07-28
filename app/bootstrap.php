@@ -15,10 +15,32 @@ spl_autoload_register(function (string $class): void {
     }
 });
 
+function base_url(): string
+{
+    static $base;
+    if ($base !== null) {
+        return $base;
+    }
+
+    $configured = trim((string) ($_ENV['APP_BASE_PATH'] ?? getenv('APP_BASE_PATH') ?: ''));
+    if ($configured !== '') {
+        return $base = '/' . trim($configured, '/');
+    }
+
+    $documentRoot = realpath((string) ($_SERVER['DOCUMENT_ROOT'] ?? ''));
+    $projectRoot = realpath(dirname(__DIR__));
+    if ($documentRoot && $projectRoot && str_starts_with($projectRoot, $documentRoot)) {
+        $relative = str_replace('\\', '/', substr($projectRoot, strlen($documentRoot)));
+        return $base = rtrim('/' . trim($relative, '/'), '/');
+    }
+
+    $script = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? '/index.php'));
+    return $base = rtrim(dirname($script), '/.');
+}
+
 function url(string $path = ''): string
 {
-    $base = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
-    return ($base === '/' ? '' : $base) . '/' . ltrim($path, '/');
+    return base_url() . '/' . ltrim($path, '/');
 }
 
 function asset(string $path): string { return url('/public/' . ltrim($path, '/')); }
@@ -26,4 +48,3 @@ function e(mixed $value): string { return htmlspecialchars((string) $value, ENT_
 function csrf_field(): string { return '<input type="hidden" name="_token" value="' . e(App\Core\Csrf::token()) . '">'; }
 function post_image(?string $image): string { return $image ? (str_starts_with($image, 'http') ? $image : asset($image)) : asset('images/placeholder.svg'); }
 function date_es(?string $date): string { return $date ? (new DateTime($date))->format('d.m.Y · H:i') : ''; }
-

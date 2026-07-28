@@ -6,7 +6,13 @@ require __DIR__ . '/app/bootstrap.php';
 use App\Controllers\AdminController;
 use App\Controllers\SiteController;
 
-$path = '/' . trim((string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+$requestPath = rawurldecode((string) parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+$base = base_url();
+if ($base !== '' && ($requestPath === $base || str_starts_with($requestPath, $base . '/'))) {
+    $requestPath = substr($requestPath, strlen($base));
+}
+$requestPath = preg_replace('#^/index\.php(?:/|$)#', '/', $requestPath) ?? $requestPath;
+$path = '/' . trim($requestPath, '/');
 $path = $path === '//' ? '/' : $path;
 $method = $_SERVER['REQUEST_METHOD'];
 $site = new SiteController();
@@ -25,5 +31,4 @@ elseif (preg_match('#^/admin/posts/(\d+)$#', $path, $m) && $method === 'POST' &&
 elseif (preg_match('#^/admin/posts/(\d+)$#', $path, $m) && $method === 'POST') $admin->store((int) $m[1]);
 elseif (preg_match('#^/noticia/([a-z0-9-]+)$#', $path, $m) && $method === 'GET') $site->article($m[1]);
 elseif (preg_match('#^/categoria/([a-z0-9-]+)$#', $path, $m) && $method === 'GET') $site->category($m[1]);
-else { http_response_code(404); $site->category('__not_found__'); }
-
+else { http_response_code(404); $site->notFound(); }
