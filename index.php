@@ -19,6 +19,7 @@ $site = new SiteController();
 $admin = new AdminController();
 
 if ($path === '/' && $method === 'GET') $site->home();
+elseif ($path === '/buscar' && $method === 'GET') $site->search();
 elseif ($path === '/admin/login' && $method === 'GET') $admin->login();
 elseif ($path === '/admin/login' && $method === 'POST') $admin->authenticate();
 elseif ($path === '/admin/logout' && $method === 'POST') $admin->logout();

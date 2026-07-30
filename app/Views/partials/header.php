@@ -1,6 +1,6 @@
 <div class="utility"><div class="shell"><span><?= e(date_es(date('Y-m-d H:i:s'))) ?> · Provincia de San Antonio</span><span>Edición digital</span></div></div>
 <header class="site-header">
-  <div class="shell brandbar"><button class="menu-button" aria-label="Abrir menú" aria-expanded="false">☰</button><a href="<?= url('/') ?>" class="brand"><img src="<?= url('/logo/logo.png') ?>" alt="VecinoSS"></a><a class="send" href="mailto:prensa@vecinoss.cl">Envía tu noticia <b>→</b></a></div>
+  <div class="shell brandbar"><button class="menu-button" aria-label="Abrir menú" aria-expanded="false">☰</button><div class="brand-tools"><a href="<?= url('/') ?>" class="brand"><img src="<?= url('/logo/logo.png') ?>" alt="VecinoSS"></a><form class="header-search" action="<?= url('/buscar') ?>" method="get" role="search"><label class="sr-only" for="header-search">Buscar noticias</label><input id="header-search" type="search" name="q" value="<?= e($query ?? '') ?>" placeholder="Buscar noticias" aria-label="Buscar noticias" required><button type="submit" aria-label="Buscar"><span aria-hidden="true"></span></button></form></div><a class="send" href="mailto:prensa@vecinoss.cl">Envía tu noticia <b>→</b></a></div>
   <nav class="main-nav" aria-label="Navegación principal"><div class="shell">
     <a href="<?= url('/') ?>">Inicio</a>
     <?php foreach (array_slice($categories ?? App\Models\Category::topLevel(), 0, 6) as $navCategory): ?><a href="<?= url('/categoria/'.$navCategory['slug']) ?>"><?= e($navCategory['name']) ?></a><?php endforeach; ?>
