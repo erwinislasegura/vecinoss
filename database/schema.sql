@@ -61,6 +61,13 @@ CREATE TABLE settings (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+INSERT INTO settings (setting_key,setting_value) VALUES
+('social_facebook_enabled','0'),('social_facebook_url',''),
+('social_instagram_enabled','0'),('social_instagram_url',''),
+('social_x_enabled','0'),('social_x_url',''),
+('social_youtube_enabled','0'),('social_youtube_url',''),
+('social_whatsapp_enabled','0'),('social_whatsapp_url','');
+
 CREATE TABLE videos (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(180) NOT NULL,
