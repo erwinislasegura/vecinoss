@@ -19,6 +19,7 @@ $site = new SiteController();
 $admin = new AdminController();
 
 if ($path === '/' && $method === 'GET') $site->home();
+elseif ($path === '/buscar' && $method === 'GET') $site->search();
 elseif ($path === '/admin/login' && $method === 'GET') $admin->login();
 elseif ($path === '/admin/login' && $method === 'POST') $admin->authenticate();
 elseif ($path === '/admin/logout' && $method === 'POST') $admin->logout();
@@ -32,6 +33,8 @@ elseif (preg_match('#^/admin/events/(\d+)$#', $path, $m) && $method === 'POST' &
 elseif (preg_match('#^/admin/events/(\d+)$#', $path, $m) && $method === 'POST') $admin->storeEvent((int) $m[1]);
 elseif ($path === '/admin/weather' && $method === 'GET') $admin->weather();
 elseif ($path === '/admin/weather' && $method === 'POST') $admin->saveWeather();
+elseif ($path === '/admin/social' && $method === 'GET') $admin->social();
+elseif ($path === '/admin/social' && $method === 'POST') $admin->saveSocial();
 elseif ($path === '/admin/videos' && $method === 'GET') $admin->videos();
 elseif ($path === '/admin/videos/create' && $method === 'GET') $admin->createVideo();
 elseif ($path === '/admin/videos' && $method === 'POST') $admin->saveVideo();

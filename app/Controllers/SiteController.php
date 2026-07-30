@@ -26,6 +26,20 @@ final class SiteController extends Controller
             'videos' => Video::published(),
         ]);
     }
+    public function search(): void
+    {
+        $query = trim(is_string($_GET['q'] ?? null) ? $_GET['q'] : '');
+        $query = mb_substr(preg_replace('/\s+/u', ' ', $query) ?? $query, 0, 100);
+        $posts = $query === '' ? [] : Post::search($query, 60);
+
+        $this->render('site/search', [
+            'title' => $query === '' ? 'Buscar' : 'Resultados para “' . $query . '”',
+            'query' => $query,
+            'posts' => $posts,
+            'categories' => Category::topLevel(),
+            'metaDescription' => 'Busca noticias, eventos e historias de la Provincia de San Antonio.',
+        ]);
+    }
     public function article(string $slug): void { $post=Post::findBySlug($slug); if(!$post){http_response_code(404);$this->render('site/404',['title'=>'Noticia no encontrada']);return;} $this->render('site/article',['title'=>$post['title'],'post'=>$post,'related'=>Post::published(4,(int)$post['category_id']),'categories'=>Category::topLevel()]); }
     public function video(int $id): void { $video=Video::findPublished($id); if(!$video){http_response_code(404);$this->render('site/404',['title'=>'Video no encontrado','categories'=>Category::topLevel()]);return;} $related=array_values(array_filter(Video::published(5),fn(array $item):bool=>(int)$item['id']!==$id)); $this->render('site/video',['title'=>$video['title'],'video'=>$video,'related'=>array_slice($related,0,3),'categories'=>Category::topLevel()]); }
     public function videos(): void { $this->render('site/videos',['title'=>'VecinoSS TV','videos'=>Video::published(60),'categories'=>Category::topLevel(),'communes'=>Video::COMMUNES,'formats'=>Video::FORMATS]); }

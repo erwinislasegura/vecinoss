@@ -7,6 +7,14 @@ final class Post
     private const SELECT = "SELECT p.*, c.name category_name, c.slug category_slug, parent.name parent_category_name, u.name author_name, GROUP_CONCAT(DISTINCT t.name ORDER BY t.name SEPARATOR ', ') tag_names FROM posts p JOIN categories c ON c.id=p.category_id LEFT JOIN categories parent ON parent.id=c.parent_id JOIN users u ON u.id=p.user_id LEFT JOIN post_tags pt ON pt.post_id=p.id LEFT JOIN tags t ON t.id=pt.tag_id";
     public static function published(int $limit=12, ?int $categoryId=null): array { $sql=self::SELECT." WHERE p.status='published' AND p.published_at<=CURRENT_TIMESTAMP".($categoryId?' AND (p.category_id=? OR c.parent_id=?)':'').' GROUP BY p.id ORDER BY p.published_at DESC,p.id DESC LIMIT '.(int)$limit; $s=Database::connection()->prepare($sql); $s->execute($categoryId?[$categoryId,$categoryId]:[]); return $s->fetchAll(); }
     public static function publishedToday(int $limit=10): array { $s=Database::connection()->query("SELECT title,slug,published_at FROM posts WHERE status='published' AND published_at BETWEEN CURRENT_DATE AND CURRENT_TIMESTAMP ORDER BY published_at DESC,id DESC LIMIT ".(int)$limit);return $s->fetchAll(); }
+    public static function search(string $query, int $limit=60): array
+    {
+        $sql = self::SELECT . " WHERE p.status='published' AND p.published_at<=CURRENT_TIMESTAMP AND (p.title LIKE ? OR p.excerpt LIKE ? OR p.body LIKE ? OR c.name LIKE ? OR EXISTS (SELECT 1 FROM post_tags search_pt JOIN tags search_t ON search_t.id=search_pt.tag_id WHERE search_pt.post_id=p.id AND search_t.name LIKE ?)) GROUP BY p.id ORDER BY p.published_at DESC,p.id DESC LIMIT " . (int) $limit;
+        $statement = Database::connection()->prepare($sql);
+        $term = '%' . $query . '%';
+        $statement->execute(array_fill(0, 5, $term));
+        return $statement->fetchAll();
+    }
     public static function featured(): ?array { $s=Database::connection()->query(self::SELECT." WHERE p.status='published' AND p.published_at<=CURRENT_TIMESTAMP GROUP BY p.id ORDER BY p.featured DESC,p.published_at DESC LIMIT 1"); return $s->fetch() ?: null; }
     public static function findBySlug(string $slug): ?array { $s=Database::connection()->prepare(self::SELECT." WHERE p.slug=? AND p.status='published' GROUP BY p.id LIMIT 1");$s->execute([$slug]);return $s->fetch()?:null; }
     public static function allAdmin(?int $categoryId=null): array { $sql=self::SELECT.($categoryId?' WHERE p.category_id=? OR c.parent_id=?':'').' GROUP BY p.id ORDER BY p.created_at DESC';$s=Database::connection()->prepare($sql);$s->execute($categoryId?[$categoryId,$categoryId]:[]);return $s->fetchAll(); }

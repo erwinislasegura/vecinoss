@@ -14,6 +14,18 @@ final class Setting
         'weather_fallback_latitude' => '-33.5933',
         'weather_fallback_longitude' => '-71.6217',
     ];
+    private const SOCIAL_DEFAULTS = [
+        'social_facebook_enabled' => '0',
+        'social_facebook_url' => '',
+        'social_instagram_enabled' => '0',
+        'social_instagram_url' => '',
+        'social_x_enabled' => '0',
+        'social_x_url' => '',
+        'social_youtube_enabled' => '0',
+        'social_youtube_url' => '',
+        'social_whatsapp_enabled' => '0',
+        'social_whatsapp_url' => '',
+    ];
 
     public static function weather(): array
     {
@@ -28,6 +40,22 @@ final class Setting
         self::ensureTable();
         $statement = Database::connection()->prepare('INSERT INTO settings (setting_key, setting_value) VALUES (:key, :value) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)');
         foreach (self::DEFAULTS as $key => $default) {
+            $statement->execute(['key' => $key, 'value' => (string) ($values[$key] ?? $default)]);
+        }
+    }
+
+    public static function social(): array
+    {
+        self::ensureTable();
+        $rows = Database::connection()->query("SELECT setting_key, setting_value FROM settings WHERE setting_key LIKE 'social_%'")->fetchAll();
+        return array_merge(self::SOCIAL_DEFAULTS, array_column($rows, 'setting_value', 'setting_key'));
+    }
+
+    public static function saveSocial(array $values): void
+    {
+        self::ensureTable();
+        $statement = Database::connection()->prepare('INSERT INTO settings (setting_key, setting_value) VALUES (:key, :value) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)');
+        foreach (self::SOCIAL_DEFAULTS as $key => $default) {
             $statement->execute(['key' => $key, 'value' => (string) ($values[$key] ?? $default)]);
         }
     }
