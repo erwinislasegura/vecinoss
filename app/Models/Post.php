@@ -9,6 +9,23 @@ final class Post
     public static function publishedToday(int $limit=10): array { $s=Database::connection()->query("SELECT title,slug,published_at FROM posts WHERE status='published' AND published_at BETWEEN CURRENT_DATE AND CURRENT_TIMESTAMP ORDER BY published_at DESC,id DESC LIMIT ".(int)$limit);return $s->fetchAll(); }
     public static function featured(): ?array { $s=Database::connection()->query(self::SELECT." WHERE p.status='published' AND p.published_at<=CURRENT_TIMESTAMP GROUP BY p.id ORDER BY p.featured DESC,p.published_at DESC LIMIT 1"); return $s->fetch() ?: null; }
     public static function findBySlug(string $slug): ?array { $s=Database::connection()->prepare(self::SELECT." WHERE p.slug=? AND p.status='published' GROUP BY p.id LIMIT 1");$s->execute([$slug]);return $s->fetch()?:null; }
+    public static function search(string $query, int $limit=48): array
+    {
+        $words = preg_split('/\s+/u', trim($query), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $words = array_slice($words, 0, 8);
+        if (!$words) return [];
+        $conditions = [];
+        $parameters = [];
+        foreach ($words as $word) {
+            $term = '%'.str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $word).'%';
+            $conditions[] = "(p.title LIKE ? ESCAPE '\\\\' OR p.excerpt LIKE ? ESCAPE '\\\\' OR p.body LIKE ? ESCAPE '\\\\' OR c.name LIKE ? ESCAPE '\\\\' OR t.name LIKE ? ESCAPE '\\\\')";
+            array_push($parameters, $term, $term, $term, $term, $term);
+        }
+        $sql = self::SELECT." WHERE p.status='published' AND p.published_at<=CURRENT_TIMESTAMP AND ".implode(' AND ', $conditions).' GROUP BY p.id ORDER BY p.published_at DESC,p.id DESC LIMIT '.(int)$limit;
+        $statement = Database::connection()->prepare($sql);
+        $statement->execute($parameters);
+        return $statement->fetchAll();
+    }
     public static function allAdmin(?int $categoryId=null): array { $sql=self::SELECT.($categoryId?' WHERE p.category_id=? OR c.parent_id=?':'').' GROUP BY p.id ORDER BY p.created_at DESC';$s=Database::connection()->prepare($sql);$s->execute($categoryId?[$categoryId,$categoryId]:[]);return $s->fetchAll(); }
     public static function find(int $id): ?array { $s=Database::connection()->prepare("SELECT p.*, GROUP_CONCAT(t.name ORDER BY t.name SEPARATOR ', ') tags FROM posts p LEFT JOIN post_tags pt ON pt.post_id=p.id LEFT JOIN tags t ON t.id=pt.tag_id WHERE p.id=? GROUP BY p.id");$s->execute([$id]);return $s->fetch()?:null; }
     public static function save(array $d, ?int $id=null): void {
