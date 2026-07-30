@@ -31,6 +31,18 @@ final class AdminController extends Controller
         foreach($platforms as $platform){$url=trim(is_string($_POST['social_'.$platform.'_url']??null)?$_POST['social_'.$platform.'_url']:'');if($url!==''&&(!$this->isSafeUrl($url))){$this->render('admin/social',['title'=>'Redes sociales','social'=>$_POST,'error'=>'Todas las direcciones deben ser URL válidas que comiencen con http:// o https://.'],'admin');return;}$values['social_'.$platform.'_url']=$url;$values['social_'.$platform.'_enabled']=isset($_POST['social_'.$platform.'_enabled'])&&$url!==''?'1':'0';}
         Setting::saveSocial($values); $_SESSION['flash']='Redes sociales actualizadas.'; $this->redirect('/admin/social');
     }
+    public function horoscope(): void { Auth::requireLogin(); $this->render('admin/horoscope',['title'=>'Configuración del horóscopo','horoscope'=>Setting::horoscope(),'error'=>null],'admin'); }
+    public function saveHoroscope(): void
+    {
+        Auth::requireLogin(); Csrf::verify();
+        $fields=['horoscope_cta_eyebrow','horoscope_cta_title','horoscope_cta_text','horoscope_cta_button','horoscope_page_title','horoscope_page_intro'];
+        $values=['horoscope_enabled'=>isset($_POST['horoscope_enabled'])?'1':'0'];
+        foreach($fields as $field) $values[$field]=trim((string)($_POST[$field]??''));
+        if($values['horoscope_cta_title']===''||$values['horoscope_cta_button']===''||$values['horoscope_page_title']===''){
+            $this->render('admin/horoscope',['title'=>'Configuración del horóscopo','horoscope'=>$values,'error'=>'El título del CTA, el botón y el título de la página son obligatorios.'],'admin'); return;
+        }
+        Setting::saveHoroscope($values); $_SESSION['flash']='Configuración del horóscopo guardada.'; $this->redirect('/admin/horoscope');
+    }
     public function create(): void { Auth::requireLogin(); $this->form(null); }
     public function edit(int $id): void { Auth::requireLogin(); $this->form(Post::find($id)); }
     private function form(?array $post): void { $this->render('admin/posts/form',['title'=>$post?'Editar noticia':'Nueva noticia','post'=>$post,'categories'=>Category::all(),'error'=>null],'admin'); }

@@ -5,6 +5,7 @@
     <title><?= e($title) ?> | VecinoSS</title>
     <meta name="description" content="<?= e($metaDescription ?? 'Noticias locales, actualidad y comunidad de la Provincia de San Antonio.') ?>">
     <meta name="theme-color" content="#090909">
+    <script>try{if(localStorage.getItem('vecinoss-contrast')==='high')document.documentElement.classList.add('high-contrast')}catch(e){}</script>
     <link rel="stylesheet" href="<?= asset('css/app.css') ?>">
 </head>
 <body>

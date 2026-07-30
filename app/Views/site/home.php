@@ -44,6 +44,14 @@ $shareTitle = 'VecinoSS — Noticias de la Provincia de San Antonio';
 </section>
 <?php endif; ?>
 
+<?php if (($horoscope['horoscope_enabled'] ?? '0') === '1'): ?>
+<section class="shell horoscope-cta" aria-labelledby="horoscope-cta-title">
+    <div class="horoscope-cta-symbols" aria-hidden="true">♈ ♊ ♌ ♎ ♐ ♒</div>
+    <div><small><?= e($horoscope['horoscope_cta_eyebrow']) ?></small><h2 id="horoscope-cta-title"><?= e($horoscope['horoscope_cta_title']) ?></h2><p><?= e($horoscope['horoscope_cta_text']) ?></p></div>
+    <a href="<?= url('/horoscopo') ?>"><?= e($horoscope['horoscope_cta_button']) ?> <b>→</b></a>
+</section>
+<?php endif; ?>
+
 <section class="shell section" id="noticias">
     <div class="section-title"><div><small>ACTUALIDAD</small><h2>Últimas noticias</h2></div><div class="category-buttons"><?php foreach ($categories as $category): ?><a href="<?= url('/categoria/' . $category['slug']) ?>"><?= e($category['name']) ?></a><?php endforeach; ?></div></div>
     <div class="news-grid home-news-grid"><?php foreach ($latestPosts as $post) require __DIR__ . '/../partials/card.php'; ?></div>

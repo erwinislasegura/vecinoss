@@ -20,6 +20,7 @@ $admin = new AdminController();
 
 if ($path === '/' && $method === 'GET') $site->home();
 elseif ($path === '/buscar' && $method === 'GET') $site->search();
+elseif ($path === '/horoscopo' && $method === 'GET') $site->horoscope();
 elseif ($path === '/admin/login' && $method === 'GET') $admin->login();
 elseif ($path === '/admin/login' && $method === 'POST') $admin->authenticate();
 elseif ($path === '/admin/logout' && $method === 'POST') $admin->logout();
@@ -35,6 +36,8 @@ elseif ($path === '/admin/weather' && $method === 'GET') $admin->weather();
 elseif ($path === '/admin/weather' && $method === 'POST') $admin->saveWeather();
 elseif ($path === '/admin/social' && $method === 'GET') $admin->social();
 elseif ($path === '/admin/social' && $method === 'POST') $admin->saveSocial();
+elseif ($path === '/admin/horoscope' && $method === 'GET') $admin->horoscope();
+elseif ($path === '/admin/horoscope' && $method === 'POST') $admin->saveHoroscope();
 elseif ($path === '/admin/videos' && $method === 'GET') $admin->videos();
 elseif ($path === '/admin/videos/create' && $method === 'GET') $admin->createVideo();
 elseif ($path === '/admin/videos' && $method === 'POST') $admin->saveVideo();

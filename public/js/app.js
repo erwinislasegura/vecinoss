@@ -27,6 +27,23 @@ document.addEventListener('keydown', event => {
   button?.focus();
 });
 
+const contrastButtons = document.querySelectorAll('[data-contrast-toggle]');
+const syncContrastControls = () => {
+  const active = document.documentElement.classList.contains('high-contrast');
+  contrastButtons.forEach(button => {
+    button.setAttribute('aria-pressed', String(active));
+    button.setAttribute('aria-label', active ? 'Desactivar alto contraste' : 'Activar alto contraste');
+    const label = button.querySelector('[data-contrast-label]');
+    if (label) label.textContent = active ? 'Contraste normal' : 'Alto contraste';
+  });
+};
+contrastButtons.forEach(button => button.addEventListener('click', () => {
+  const active = document.documentElement.classList.toggle('high-contrast');
+  try { localStorage.setItem('vecinoss-contrast', active ? 'high' : 'normal'); } catch (error) {}
+  syncContrastControls();
+}));
+syncContrastControls();
+
 const liveClock = document.querySelector('[data-live-clock]');
 if (liveClock) {
   const clockValue = liveClock.querySelector('b');

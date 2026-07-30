@@ -13,6 +13,13 @@ final class Setting
         'weather_fallback_name' => 'San Antonio',
         'weather_fallback_latitude' => '-33.5933',
         'weather_fallback_longitude' => '-71.6217',
+        'horoscope_enabled' => '1',
+        'horoscope_cta_eyebrow' => 'TU GUÍA DEL DÍA',
+        'horoscope_cta_title' => 'Horóscopo diario',
+        'horoscope_cta_text' => 'Descubre qué tienen preparado los astros para tu signo.',
+        'horoscope_cta_button' => 'Ver mi horóscopo',
+        'horoscope_page_title' => 'Horóscopo de hoy',
+        'horoscope_page_intro' => 'Consulta las predicciones para los doce signos del zodiaco.',
     ];
     private const SOCIAL_DEFAULTS = [
         'social_facebook_enabled' => '0',
@@ -40,6 +47,25 @@ final class Setting
         self::ensureTable();
         $statement = Database::connection()->prepare('INSERT INTO settings (setting_key, setting_value) VALUES (:key, :value) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)');
         foreach (self::DEFAULTS as $key => $default) {
+            if (!str_starts_with($key, 'weather_')) continue;
+            $statement->execute(['key' => $key, 'value' => (string) ($values[$key] ?? $default)]);
+        }
+    }
+
+    public static function horoscope(): array
+    {
+        self::ensureTable();
+        $rows = Database::connection()->query("SELECT setting_key, setting_value FROM settings WHERE setting_key LIKE 'horoscope_%'")->fetchAll();
+        $values = array_column($rows, 'setting_value', 'setting_key');
+        return array_merge(self::DEFAULTS, $values);
+    }
+
+    public static function saveHoroscope(array $values): void
+    {
+        self::ensureTable();
+        $statement = Database::connection()->prepare('INSERT INTO settings (setting_key, setting_value) VALUES (:key, :value) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)');
+        foreach (self::DEFAULTS as $key => $default) {
+            if (!str_starts_with($key, 'horoscope_')) continue;
             $statement->execute(['key' => $key, 'value' => (string) ($values[$key] ?? $default)]);
         }
     }
