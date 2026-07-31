@@ -1,7 +1,24 @@
 document.querySelector('.menu-button')?.addEventListener('click', event => {
   const nav = document.querySelector('.main-nav');
   const open = nav.classList.toggle('open');
+  event.currentTarget.classList.toggle('is-open', open);
   event.currentTarget.setAttribute('aria-expanded', String(open));
+  event.currentTarget.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+});
+
+const headerSearch = document.querySelector('.header-search');
+headerSearch?.addEventListener('submit', event => {
+  if (window.matchMedia('(max-width: 650px)').matches && !headerSearch.classList.contains('is-open')) {
+    event.preventDefault();
+    headerSearch.classList.add('is-open');
+    headerSearch.querySelector('input').focus();
+  }
+});
+headerSearch?.querySelector('input')?.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    headerSearch.classList.remove('is-open');
+    event.currentTarget.blur();
+  }
 });
 
 const liveClock = document.querySelector('[data-live-clock]');
