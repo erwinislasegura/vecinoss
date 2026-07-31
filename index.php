@@ -20,6 +20,7 @@ $admin = new AdminController();
 
 if ($path === '/' && $method === 'GET') $site->home();
 elseif ($path === '/buscar' && $method === 'GET') $site->search();
+elseif ($path === '/horoscopo' && $method === 'GET') $site->horoscope();
 elseif ($path === '/admin/login' && $method === 'GET') $admin->login();
 elseif ($path === '/admin/login' && $method === 'POST') $admin->authenticate();
 elseif ($path === '/admin/logout' && $method === 'POST') $admin->logout();
@@ -33,6 +34,10 @@ elseif (preg_match('#^/admin/events/(\d+)$#', $path, $m) && $method === 'POST' &
 elseif (preg_match('#^/admin/events/(\d+)$#', $path, $m) && $method === 'POST') $admin->storeEvent((int) $m[1]);
 elseif ($path === '/admin/weather' && $method === 'GET') $admin->weather();
 elseif ($path === '/admin/weather' && $method === 'POST') $admin->saveWeather();
+elseif ($path === '/admin/social' && $method === 'GET') $admin->social();
+elseif ($path === '/admin/social' && $method === 'POST') $admin->saveSocial();
+elseif ($path === '/admin/horoscope' && $method === 'GET') $admin->horoscope();
+elseif ($path === '/admin/horoscope' && $method === 'POST') $admin->saveHoroscope();
 elseif ($path === '/admin/videos' && $method === 'GET') $admin->videos();
 elseif ($path === '/admin/videos/create' && $method === 'GET') $admin->createVideo();
 elseif ($path === '/admin/videos' && $method === 'POST') $admin->saveVideo();
@@ -45,6 +50,8 @@ elseif (preg_match('#^/admin/posts/(\d+)/edit$#', $path, $m) && $method === 'GET
 elseif (preg_match('#^/admin/posts/(\d+)$#', $path, $m) && $method === 'POST' && ($_POST['_method'] ?? '') === 'DELETE') $admin->destroy((int) $m[1]);
 elseif (preg_match('#^/admin/posts/(\d+)$#', $path, $m) && $method === 'POST') $admin->store((int) $m[1]);
 elseif (preg_match('#^/noticia/([a-z0-9-]+)$#', $path, $m) && $method === 'GET') $site->article($m[1]);
+elseif ($path === '/videos' && $method === 'GET') $site->videos();
+elseif ($path === '/eventos' && $method === 'GET') $site->events();
 elseif (preg_match('#^/video/(\d+)$#', $path, $m) && $method === 'GET') $site->video((int) $m[1]);
 elseif (preg_match('#^/categoria/([a-z0-9-]+)$#', $path, $m) && $method === 'GET') $site->category($m[1]);
 else { http_response_code(404); $site->notFound(); }
