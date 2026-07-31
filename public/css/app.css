@@ -88,6 +88,9 @@ body{overflow-x:hidden}a,button{transition:color .2s ease,background-color .2s e
 .utility-place:before{content:"";width:6px;height:6px;margin-right:8px;background:var(--yellow);border-radius:50%}
 .header-socials{position:static;display:flex;height:auto;gap:5px;transform:none}
 .header-socials a{width:24px;height:24px;border-color:#ffffff1f;color:#aeb0b2;transition:background .18s ease,border-color .18s ease,color .18s ease}
+.header-socials a{width:29px;height:29px;color:#fff}
+.header-socials svg{width:17px;height:17px;fill:currentColor;stroke:none}
+.header-socials svg .brand-icon-fill{fill:currentColor;stroke:none}
 .utility-actions{display:flex;align-items:center;justify-content:flex-end;gap:15px}
 .utility-actions .contrast-toggle{display:flex;align-items:center;gap:7px;min-height:25px;padding:0 9px;border:1px solid #ffffff20;background:transparent;color:#bfc1c3;font-size:8px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;cursor:pointer}
 .site-header{position:relative;z-index:95;background:#0c0d0f;color:#fff;border-bottom:0}
@@ -143,7 +146,9 @@ body{overflow-x:hidden}a,button{transition:color .2s ease,background-color .2s e
   .utility{height:32px}
   .utility .shell{display:flex;justify-content:center}
   .utility-location,.utility-actions{display:none}
-  .header-socials{display:flex;height:32px;gap:8px}
+  .header-socials{display:flex;height:32px;gap:7px}
+  .header-socials a{width:31px;height:31px;color:#fff}
+  .header-socials svg{width:18px;height:18px}
   .header-socials:empty{display:none}
   .utility:has(.header-socials:empty){display:none}
   .site-header{position:sticky;top:0}
