@@ -27,6 +27,22 @@ document.addEventListener('keydown', event => {
   button?.focus();
 });
 
+const compactHeaderSearch = document.querySelector('[data-header-search]');
+const openCompactHeaderSearch = event => {
+  if (window.matchMedia('(max-width: 650px)').matches && !compactHeaderSearch.classList.contains('is-open')) {
+    event.preventDefault();
+    compactHeaderSearch.classList.add('is-open');
+    compactHeaderSearch.querySelector('input')?.focus();
+  }
+};
+compactHeaderSearch?.querySelector('button')?.addEventListener('click', openCompactHeaderSearch);
+compactHeaderSearch?.addEventListener('submit', openCompactHeaderSearch);
+compactHeaderSearch?.querySelector('input')?.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  compactHeaderSearch.classList.remove('is-open');
+  event.currentTarget.blur();
+});
+
 const contrastButtons = document.querySelectorAll('[data-contrast-toggle]');
 const syncContrastControls = () => {
   const active = document.documentElement.classList.contains('high-contrast');
