@@ -5,7 +5,7 @@
     <h1>¿Qué quieres encontrar?</h1>
     <form class="search-page-form" action="<?= url('/buscar') ?>" method="get" role="search">
       <label class="visually-hidden" for="page-search">Buscar noticias, eventos y comunidad</label>
-      <input id="page-search" type="search" name="q" value="<?= e($query) ?>" placeholder="Escribe una palabra o tema…" maxlength="100" autofocus required>
+      <input id="page-search" type="search" name="q" value="<?= e($query) ?>" placeholder="Escribe una palabra o tema…" maxlength="100" enterkeyhint="search" autocomplete="off" required>
       <button type="submit">Buscar <span aria-hidden="true">→</span></button>
     </form>
   </div>
