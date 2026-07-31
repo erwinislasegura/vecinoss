@@ -8,18 +8,33 @@ $socialNetworks = [
   'whatsapp' => ['WhatsApp', '<path d="M20 11.6a8 8 0 0 1-11.8 7L4 20l1.4-4A8 8 0 1 1 20 11.6Z"/><path d="M9 8c.5 3 2 4.5 5 5"/>'],
 ];
 ?>
-<div class="utility"><div class="shell"><span class="utility-location"><?= e(date_es(date('Y-m-d H:i:s'))) ?> · Provincia de San Antonio</span><div class="header-socials" aria-label="Redes sociales"><?php foreach($socialNetworks as $key=>$network): ?><?php if(($socialSettings['social_'.$key.'_enabled']??'0')==='1'&&!empty($socialSettings['social_'.$key.'_url'])): ?><a href="<?= e($socialSettings['social_'.$key.'_url']) ?>" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en <?= e($network[0]) ?>"><svg viewBox="0 0 24 24" aria-hidden="true"><?= $network[1] ?></svg></a><?php endif; ?><?php endforeach; ?></div><div class="utility-actions"><span class="utility-edition">Edición digital</span><button class="contrast-toggle" type="button" data-contrast-toggle aria-pressed="false"><span class="contrast-icon" aria-hidden="true">◐</span><span data-contrast-label>Alto contraste</span></button></div></div></div>
+<div class="utility">
+  <div class="shell">
+    <div class="utility-location"><span class="utility-place">Provincia de San Antonio</span><span><?= e(date_es(date('Y-m-d H:i:s'))) ?></span></div>
+    <div class="header-socials" aria-label="Redes sociales"><?php foreach($socialNetworks as $key=>$network): ?><?php if(($socialSettings['social_'.$key.'_enabled']??'0')==='1'&&!empty($socialSettings['social_'.$key.'_url'])): ?><a href="<?= e($socialSettings['social_'.$key.'_url']) ?>" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en <?= e($network[0]) ?>"><svg viewBox="0 0 24 24" aria-hidden="true"><?= $network[1] ?></svg></a><?php endif; ?><?php endforeach; ?></div>
+    <div class="utility-actions"><span class="utility-edition">Edición digital</span><button class="contrast-toggle" type="button" data-contrast-toggle aria-pressed="false"><span class="contrast-icon" aria-hidden="true">◐</span><span data-contrast-label>Alto contraste</span></button></div>
+  </div>
+</div>
 <header class="site-header">
-  <div class="shell brandbar"><button class="menu-button" aria-label="Abrir menú" aria-controls="main-menu" aria-expanded="false"><span></span><span></span><span></span></button><div class="brand-search"><a href="<?= url('/') ?>" class="brand" aria-label="VecinoSS, ir al inicio"><img src="<?= url('/logo/logo.png') ?>" alt="VecinoSS"></a><form class="header-search" action="<?= url('/buscar') ?>" method="get" role="search"><label class="visually-hidden" for="header-search">Buscar en VecinoSS</label><input id="header-search" type="search" name="q" value="<?= e(is_string($_GET['q'] ?? null) ? $_GET['q'] : '') ?>" placeholder="Buscar noticias" maxlength="100" required><button type="submit" aria-label="Buscar"><span aria-hidden="true"></span></button></form></div><div class="brand-end"><a class="send" href="mailto:prensa@vecinoss.cl"><span class="send-full">Envía tu noticia</span><span class="send-short">Enviar</span><b>→</b></a><button class="contrast-toggle contrast-mobile" type="button" data-contrast-toggle aria-pressed="false" aria-label="Activar alto contraste">◐</button></div></div>
+  <div class="shell brandbar">
+    <button class="menu-button" aria-label="Abrir menú" aria-controls="main-menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <a href="<?= url('/') ?>" class="brand" aria-label="VecinoSS, ir al inicio"><img src="<?= url('/logo/logo.png') ?>" alt="VecinoSS — La voz de nuestra gente"></a>
+    <form class="header-search" action="<?= url('/buscar') ?>" method="get" role="search" data-header-search>
+      <label class="visually-hidden" for="header-search">Buscar en VecinoSS</label>
+      <input id="header-search" type="search" name="q" value="<?= e(is_string($_GET['q'] ?? null) ? $_GET['q'] : '') ?>" placeholder="Buscar noticias, comunas o temas" maxlength="100" required>
+      <button type="submit" aria-label="Buscar"><span aria-hidden="true"></span></button>
+    </form>
+    <div class="brand-end"><a class="send" href="mailto:prensa@vecinoss.cl"><span>Envía tu noticia</span><b aria-hidden="true">→</b></a><button class="contrast-toggle contrast-mobile" type="button" data-contrast-toggle aria-pressed="false" aria-label="Activar alto contraste">◐</button></div>
+  </div>
   <nav class="main-nav" id="main-menu" aria-label="Navegación principal"><div class="shell">
-    <a href="<?= url('/') ?>">Inicio</a>
+    <a class="nav-home" href="<?= url('/') ?>">Inicio</a>
     <?php if ((App\Models\Setting::horoscope()['horoscope_enabled'] ?? '0') === '1'): ?><a href="<?= url('/horoscopo') ?>">Horóscopo</a><?php endif; ?>
     <?php foreach (array_slice($categories ?? App\Models\Category::topLevel(), 0, 6) as $navCategory): ?><?php $navHref = $navCategory['slug']==='vecinoss-tv' ? '/videos' : ($navCategory['slug']==='eventos' ? '/eventos' : '/categoria/'.$navCategory['slug']); ?><a href="<?= url($navHref) ?>"><?= e($navCategory['name']) ?></a><?php endforeach; ?>
   </div></nav>
 </header>
 <?php $tickerPosts = $tickerPosts ?? App\Models\Post::publishedToday(); ?>
 <div class="ticker" aria-label="Últimas noticias del día"><div class="shell">
-  <b>AHORA</b>
+  <b><span aria-hidden="true"></span>AHORA</b>
   <div class="ticker-window"><?php if ($tickerPosts): ?><div class="ticker-track"><?php for ($copy=0;$copy<2;$copy++): ?><div class="ticker-items" <?= $copy?'aria-hidden="true"':'' ?>><?php foreach($tickerPosts as $tickerPost): ?><a href="<?= url('/noticia/'.$tickerPost['slug']) ?>"><?= e($tickerPost['title']) ?></a><?php endforeach; ?></div><?php endfor; ?></div><?php else: ?><span class="ticker-empty">VecinoSS informa: la actualidad local, cerca de ti.</span><?php endif; ?></div>
   <time class="ticker-clock" data-live-clock datetime="<?= date('c') ?>"><span aria-hidden="true"></span><b><?= date('H:i') ?></b></time>
 </div></div>
