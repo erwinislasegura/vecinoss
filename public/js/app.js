@@ -2,7 +2,47 @@ document.querySelector('.menu-button')?.addEventListener('click', event => {
   const nav = document.querySelector('.main-nav');
   const open = nav.classList.toggle('open');
   event.currentTarget.setAttribute('aria-expanded', String(open));
+  event.currentTarget.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  document.body.classList.toggle('menu-open', open);
 });
+
+document.querySelectorAll('.main-nav a').forEach(link => link.addEventListener('click', () => {
+  const nav = document.querySelector('.main-nav');
+  const button = document.querySelector('.menu-button');
+  nav?.classList.remove('open');
+  document.body.classList.remove('menu-open');
+  button?.setAttribute('aria-expanded', 'false');
+  button?.setAttribute('aria-label', 'Abrir menú');
+}));
+
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape') return;
+  const nav = document.querySelector('.main-nav');
+  if (!nav?.classList.contains('open')) return;
+  nav.classList.remove('open');
+  document.body.classList.remove('menu-open');
+  const button = document.querySelector('.menu-button');
+  button?.setAttribute('aria-expanded', 'false');
+  button?.setAttribute('aria-label', 'Abrir menú');
+  button?.focus();
+});
+
+const contrastButtons = document.querySelectorAll('[data-contrast-toggle]');
+const syncContrastControls = () => {
+  const active = document.documentElement.classList.contains('high-contrast');
+  contrastButtons.forEach(button => {
+    button.setAttribute('aria-pressed', String(active));
+    button.setAttribute('aria-label', active ? 'Desactivar alto contraste' : 'Activar alto contraste');
+    const label = button.querySelector('[data-contrast-label]');
+    if (label) label.textContent = active ? 'Contraste normal' : 'Alto contraste';
+  });
+};
+contrastButtons.forEach(button => button.addEventListener('click', () => {
+  const active = document.documentElement.classList.toggle('high-contrast');
+  try { localStorage.setItem('vecinoss-contrast', active ? 'high' : 'normal'); } catch (error) {}
+  syncContrastControls();
+}));
+syncContrastControls();
 
 const liveClock = document.querySelector('[data-live-clock]');
 if (liveClock) {
@@ -15,6 +55,27 @@ if (liveClock) {
   };
   updateClock();
   setInterval(updateClock, 1000);
+}
+
+const readingProgress = document.querySelector('[data-reading-progress]');
+const story = document.querySelector('.story');
+if (readingProgress && story) {
+  let ticking = false;
+  const updateReadingProgress = () => {
+    const bounds = story.getBoundingClientRect();
+    const available = Math.max(1, story.offsetHeight - window.innerHeight);
+    const travelled = Math.min(available, Math.max(0, -bounds.top));
+    readingProgress.style.width = `${(travelled / available) * 100}%`;
+    ticking = false;
+  };
+  const requestProgressUpdate = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateReadingProgress);
+  };
+  updateReadingProgress();
+  addEventListener('scroll', requestProgressUpdate, { passive: true });
+  addEventListener('resize', requestProgressUpdate, { passive: true });
 }
 
 const weatherWidget = document.querySelector('[data-weather-widget]');
@@ -115,6 +176,23 @@ document.querySelectorAll('[data-video-inline]').forEach(player => {
   const media = createVideoMedia(player.dataset.videoUrl, player.dataset.videoTitle);
   if (media) player.replaceChildren(media);
 });
+
+const videoFilters = document.querySelector('[data-video-filters]');
+if (videoFilters) {
+  const cards = [...document.querySelectorAll('[data-video-card]')];
+  const emptyState = document.querySelector('[data-video-empty]');
+  videoFilters.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
+    const filter = button.dataset.filter;
+    let visible = 0;
+    videoFilters.querySelectorAll('[data-filter]').forEach(item => item.classList.toggle('active', item === button));
+    cards.forEach(card => {
+      const show = filter === 'all' || card.dataset.format === filter;
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+    if (emptyState) emptyState.hidden = visible !== 0;
+  }));
+}
 
 const videoDialog = document.querySelector('[data-video-dialog]');
 if (videoDialog) {

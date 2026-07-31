@@ -15,6 +15,10 @@ El esquema inicial incluye tres videos de muestra publicados en **VecinoSS TV**.
 
 El panel incluye un módulo independiente de **Agenda y eventos**. El esquema nuevo incorpora seis eventos de ejemplo; para agregarlos a una instalación existente ejecuta `mysql -u root -p < database/seed_events.sql`.
 
+La barra superior permite mostrar enlaces a Facebook, Instagram, X, YouTube y WhatsApp configurables desde **Administración → Redes sociales**. Para agregar estas opciones a una instalación existente, ejecuta `mysql -u root -p < database/migrate_social_settings.sql`.
+
+El módulo de **Horóscopo** incorpora una página pública, un CTA configurable desde el panel y un modo de alto contraste persistente para todas las vistas públicas. En instalaciones existentes ejecuta `mysql -u root -p < database/migrate_horoscope.sql`.
+
 El usuario inicial es `editor@vecinoss.cl` y la contraseña `Cambiar123!`. **Cámbiala antes de publicar el sitio.**
 
 ## Estructura
