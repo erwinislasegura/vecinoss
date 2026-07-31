@@ -17,18 +17,20 @@ $shareTitle = 'VecinoSS — Noticias de la Provincia de San Antonio';
 <section class="shell hero" id="inicio">
     <?php if ($featured): ?>
         <article class="lead">
-            <img src="<?= e(post_image($featured['image'])) ?>" alt="">
+            <a class="lead-media" href="<?= url('/noticia/' . $featured['slug']) ?>" aria-label="<?= e($featured['title']) ?>">
+                <img src="<?= e(post_image($featured['image'])) ?>" alt="">
+            </a>
             <div class="lead-card">
-                <small><?= e($featured['category_name']) ?></small>
+                <div class="lead-meta"><small><?= e($featured['category_name']) ?></small><time datetime="<?= e($featured['published_at']) ?>"><?= e(date_es($featured['published_at'])) ?></time></div>
                 <h1><a href="<?= url('/noticia/' . $featured['slug']) ?>"><?= e($featured['title']) ?></a></h1>
-                <p><?= e($featured['excerpt']) ?></p>
-                <a class="more" href="<?= url('/noticia/' . $featured['slug']) ?>">Leer noticia →</a>
+                <?php if ($featured['excerpt']): ?><p><?= e($featured['excerpt']) ?></p><?php endif; ?>
+                <a class="more lead-more" href="<?= url('/noticia/' . $featured['slug']) ?>">Leer noticia <span aria-hidden="true">→</span></a>
             </div>
         </article>
     <?php endif; ?>
     <aside class="side-stories">
         <?php foreach ($sidePosts as $post): ?>
-            <article><img src="<?= e(post_image($post['image'])) ?>" alt=""><div><small><?= e($post['category_name']) ?></small><h2><a href="<?= url('/noticia/' . $post['slug']) ?>"><?= e($post['title']) ?></a></h2><a class="more" href="<?= url('/noticia/' . $post['slug']) ?>">Ver más →</a></div></article>
+            <article><a class="side-story-image" href="<?= url('/noticia/' . $post['slug']) ?>"><img src="<?= e(post_image($post['image'])) ?>" alt=""></a><div><small><?= e($post['category_name']) ?></small><h2><a href="<?= url('/noticia/' . $post['slug']) ?>"><?= e($post['title']) ?></a></h2><time datetime="<?= e($post['published_at']) ?>"><?= e(date_es($post['published_at'])) ?></time></div></article>
         <?php endforeach; ?>
     </aside>
 </section>
