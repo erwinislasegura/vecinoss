@@ -21,7 +21,7 @@ $socialNetworks = [
     <a href="<?= url('/') ?>" class="brand" aria-label="VecinoSS, ir al inicio"><img src="<?= url('/logo/logo.png') ?>" alt="VecinoSS — La voz de nuestra gente"></a>
     <form class="header-search" action="<?= url('/buscar') ?>" method="get" role="search" data-header-search>
       <label class="visually-hidden" for="header-search">Buscar en VecinoSS</label>
-      <input id="header-search" type="search" name="q" value="<?= e(is_string($_GET['q'] ?? null) ? $_GET['q'] : '') ?>" placeholder="Buscar noticias, comunas o temas" maxlength="100" required>
+      <input id="header-search" type="search" name="q" value="<?= e(is_string($_GET['q'] ?? null) ? $_GET['q'] : '') ?>" placeholder="Buscar noticias, comunas o temas" maxlength="100" enterkeyhint="search" autocomplete="off" required>
       <button type="submit" aria-label="Buscar"><span aria-hidden="true"></span></button>
     </form>
     <div class="brand-end"><a class="send" href="mailto:prensa@vecinoss.cl"><span>Envía tu noticia</span><b aria-hidden="true">→</b></a><button class="contrast-toggle contrast-mobile" type="button" data-contrast-toggle aria-pressed="false" aria-label="Activar alto contraste">◐</button></div>
