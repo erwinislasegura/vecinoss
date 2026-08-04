@@ -66,6 +66,7 @@ INSERT INTO settings (setting_key,setting_value) VALUES
 ('social_instagram_enabled','0'),('social_instagram_url',''),
 ('social_x_enabled','0'),('social_x_url',''),
 ('social_youtube_enabled','0'),('social_youtube_url',''),
+('social_tiktok_enabled','0'),('social_tiktok_url',''),
 ('social_whatsapp_enabled','0'),('social_whatsapp_url','');
 
 INSERT INTO settings (setting_key, setting_value) VALUES
@@ -75,7 +76,8 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('horoscope_cta_text','Descubre qué tienen preparado los astros para tu signo.'),
 ('horoscope_cta_button','Ver mi horóscopo'),
 ('horoscope_page_title','Horóscopo de hoy'),
-('horoscope_page_intro','Consulta las predicciones para los doce signos del zodiaco.');
+('horoscope_page_intro','Consulta las predicciones para los doce signos del zodiaco.'),
+('horoscope_signs','');
 
 CREATE TABLE videos (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
