@@ -66,6 +66,7 @@ INSERT INTO settings (setting_key,setting_value) VALUES
 ('social_instagram_enabled','0'),('social_instagram_url',''),
 ('social_x_enabled','0'),('social_x_url',''),
 ('social_youtube_enabled','0'),('social_youtube_url',''),
+('social_tiktok_enabled','0'),('social_tiktok_url',''),
 ('social_whatsapp_enabled','0'),('social_whatsapp_url','');
 
 INSERT INTO settings (setting_key, setting_value) VALUES

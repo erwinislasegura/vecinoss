@@ -27,7 +27,7 @@ final class AdminController extends Controller
     public function social(): void { Auth::requireLogin(); $this->render('admin/social',['title'=>'Redes sociales','social'=>Setting::social(),'error'=>null],'admin'); }
     public function saveSocial(): void {
         Auth::requireLogin(); Csrf::verify();
-        $platforms=['facebook','instagram','x','youtube','whatsapp']; $values=[];
+        $platforms=['facebook','instagram','x','youtube','tiktok','whatsapp']; $values=[];
         foreach($platforms as $platform){$url=trim(is_string($_POST['social_'.$platform.'_url']??null)?$_POST['social_'.$platform.'_url']:'');if($url!==''&&(!$this->isSafeUrl($url))){$this->render('admin/social',['title'=>'Redes sociales','social'=>$_POST,'error'=>'Todas las direcciones deben ser URL válidas que comiencen con http:// o https://.'],'admin');return;}$values['social_'.$platform.'_url']=$url;$values['social_'.$platform.'_enabled']=isset($_POST['social_'.$platform.'_enabled'])&&$url!==''?'1':'0';}
         Setting::saveSocial($values); $_SESSION['flash']='Redes sociales actualizadas.'; $this->redirect('/admin/social');
     }

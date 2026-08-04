@@ -1,4 +1,4 @@
-<?php $networks=['facebook'=>'Facebook','instagram'=>'Instagram','x'=>'X / Twitter','youtube'=>'YouTube','whatsapp'=>'WhatsApp']; ?>
+<?php $networks=['facebook'=>'Facebook','instagram'=>'Instagram','x'=>'X / Twitter','youtube'=>'YouTube','tiktok'=>'TikTok','whatsapp'=>'WhatsApp']; ?>
 <section class="admin-panel settings-panel">
     <div class="panel-heading"><div><h2>Redes sociales del encabezado</h2><p>Configura qué perfiles aparecen en la barra superior, tanto en escritorio como en celulares.</p></div></div>
     <?php if ($error): ?><div class="form-error"><?= e($error) ?></div><?php endif; ?>
