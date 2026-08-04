@@ -12,5 +12,6 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('horoscope_cta_text', 'Descubre qué tienen preparado los astros para tu signo.'),
 ('horoscope_cta_button', 'Ver mi horóscopo'),
 ('horoscope_page_title', 'Horóscopo de hoy'),
-('horoscope_page_intro', 'Consulta las predicciones para los doce signos del zodiaco.')
+('horoscope_page_intro', 'Consulta las predicciones para los doce signos del zodiaco.'),
+('horoscope_signs', '')
 ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value);
