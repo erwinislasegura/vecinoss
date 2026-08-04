@@ -52,6 +52,25 @@ $shareTitle = 'VecinoSS — Noticias de la Provincia de San Antonio';
 </section>
 <?php endif; ?>
 
+<section class="shell section home-community" id="comunidad">
+    <div class="section-title"><div><small>LA VOZ DE LOS BARRIOS</small><h2>Comunidad</h2></div><a href="<?= url('/categoria/comunidad') ?>">Ver la sección →</a></div>
+    <?php if ($communityPosts): $communityLead = $communityPosts[0]; $communitySecondary = array_slice($communityPosts, 1, 3); ?>
+        <div class="community-feature-layout">
+            <article class="community-feature-card">
+                <a href="<?= url('/noticia/' . $communityLead['slug']) ?>"><img src="<?= e(post_image($communityLead['image'])) ?>" alt=""></a>
+                <div><small><?= e($communityLead['category_name']) ?></small><h3><a href="<?= url('/noticia/' . $communityLead['slug']) ?>"><?= e($communityLead['title']) ?></a></h3><?php if ($communityLead['excerpt']): ?><p><?= e($communityLead['excerpt']) ?></p><?php endif; ?><time datetime="<?= e($communityLead['published_at']) ?>"><?= e(date_es($communityLead['published_at'])) ?></time><a class="more" href="<?= url('/noticia/' . $communityLead['slug']) ?>">Leer historia →</a></div>
+            </article>
+            <div class="community-photo-list">
+                <?php foreach ($communitySecondary as $post): ?><article><a href="<?= url('/noticia/' . $post['slug']) ?>"><img src="<?= e(post_image($post['image'])) ?>" alt=""></a><div><small><?= e($post['category_name']) ?></small><h4><a href="<?= url('/noticia/' . $post['slug']) ?>"><?= e($post['title']) ?></a></h4><time datetime="<?= e($post['published_at']) ?>"><?= e(date_es($post['published_at'])) ?></time></div></article><?php endforeach; ?>
+                <article class="council community-service-card"><small>SERVICIO PÚBLICO</small><h4>Información útil para vecinos</h4><p>Datos y orientación sobre servicios de la Provincia de San Antonio.</p><a class="more" href="mailto:prensa@vecinoss.cl">Solicitar información →</a></article>
+            </div>
+        </div>
+    <?php else: ?>
+        <div class="empty">Pronto publicaremos nuevas historias de la comunidad.</div>
+    <?php endif; ?>
+    <nav class="community-links community-links-row" aria-label="Accesos de comunidad"><a href="<?= url('/categoria/comunidad') ?>">Organizaciones <b>→</b></a><a href="<?= url('/categoria/seguridad') ?>">Seguridad <b>→</b></a><a href="<?= url('/categoria/cultura') ?>">Cultura local <b>→</b></a><a href="mailto:prensa@vecinoss.cl">Envía tu historia <b>→</b></a></nav>
+</section>
+
 <section class="shell section" id="noticias">
     <div class="section-title"><div><small>ACTUALIDAD</small><h2>Últimas noticias</h2></div><div class="category-buttons"><?php foreach ($categories as $category): ?><a href="<?= url('/categoria/' . $category['slug']) ?>"><?= e($category['name']) ?></a><?php endforeach; ?></div></div>
     <div class="news-grid home-news-grid"><?php foreach ($latestPosts as $post) require __DIR__ . '/../partials/card.php'; ?></div>
@@ -65,15 +84,6 @@ $shareTitle = 'VecinoSS — Noticias de la Provincia de San Antonio';
 </div></section>
 <dialog class="video-dialog" data-video-dialog><button class="video-dialog-close" type="button" aria-label="Cerrar video" data-video-close>×</button><h2 data-video-dialog-title></h2><div class="video-player" data-video-player></div></dialog>
 <?php endif; ?>
-
-<section class="shell section home-community" id="comunidad">
-    <div class="section-title"><div><small>LA VOZ DE LOS BARRIOS</small><h2>Comunidad</h2></div><a href="<?= url('/categoria/comunidad') ?>">Ver la sección →</a></div>
-    <div class="community-grid">
-        <article class="complaints"><small>LO ÚLTIMO EN COMUNIDAD</small><h3>Tu barrio, tu voz</h3><?php foreach ($communityPosts as $post): ?><div><b><?= e($post['category_name']) ?></b><h4><a href="<?= url('/noticia/' . $post['slug']) ?>"><?= e($post['title']) ?></a></h4><time datetime="<?= e($post['published_at']) ?>"><?= e(date_es($post['published_at'])) ?></time></div><?php endforeach; ?><?php if (!$communityPosts): ?><p>Pronto publicaremos nuevas historias de la comunidad.</p><?php endif; ?><a class="more" href="mailto:prensa@vecinoss.cl">Enviar una denuncia →</a></article>
-        <article class="council"><small>SERVICIO PÚBLICO</small><h3>Información útil para vecinos</h3><p>Encuentra noticias, datos y orientación sobre los servicios de la Provincia de San Antonio.</p><ul><li>Teléfonos de emergencia</li><li>Trámites municipales</li><li>Organizaciones comunitarias</li></ul><a class="more" href="mailto:prensa@vecinoss.cl">Solicitar información →</a></article>
-        <nav class="community-links" aria-label="Accesos de comunidad"><a href="<?= url('/categoria/comunidad') ?>">Organizaciones <b>→</b></a><a href="<?= url('/categoria/seguridad') ?>">Seguridad <b>→</b></a><a href="<?= url('/categoria/cultura') ?>">Cultura local <b>→</b></a><a href="mailto:prensa@vecinoss.cl">Envía tu historia <b>→</b></a></nav>
-    </div>
-</section>
 
 <?php if ($businessPosts): ?><section class="business-section" id="guia"><div class="shell section">
     <div class="section-title"><div><small>DATOS Y EMPRENDIMIENTO</small><h2>Guía local</h2></div><a href="<?= url('/categoria/guia-local') ?>">Explorar guía →</a></div>
