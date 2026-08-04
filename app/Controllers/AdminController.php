@@ -38,8 +38,9 @@ final class AdminController extends Controller
         $fields=['horoscope_cta_eyebrow','horoscope_cta_title','horoscope_cta_text','horoscope_cta_button','horoscope_page_title','horoscope_page_intro'];
         $values=['horoscope_enabled'=>isset($_POST['horoscope_enabled'])?'1':'0'];
         foreach($fields as $field) $values[$field]=trim((string)($_POST[$field]??''));
+        $values['horoscope_signs']=Setting::encodeHoroscopeSigns(is_array($_POST['signs']??null)?$_POST['signs']:[]);
         if($values['horoscope_cta_title']===''||$values['horoscope_cta_button']===''||$values['horoscope_page_title']===''){
-            $this->render('admin/horoscope',['title'=>'Configuración del horóscopo','horoscope'=>$values,'error'=>'El título del CTA, el botón y el título de la página son obligatorios.'],'admin'); return;
+            $this->render('admin/horoscope',['title'=>'Configuración del horóscopo','horoscope'=>array_merge($values,['signs'=>json_decode($values['horoscope_signs'],true)?:Setting::HOROSCOPE_SIGNS]),'error'=>'El título del CTA, el botón y el título de la página son obligatorios.'],'admin'); return;
         }
         Setting::saveHoroscope($values); $_SESSION['flash']='Configuración del horóscopo guardada.'; $this->redirect('/admin/horoscope');
     }
