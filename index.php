@@ -44,6 +44,12 @@ elseif($path==='/admin/videos'&&$method==='POST')$admin->saveVideo();
 elseif(preg_match('#^/admin/videos/(\d+)/edit$#',$path,$m)&&$method==='GET')$admin->editVideo((int)$m[1]);
 elseif(preg_match('#^/admin/videos/(\d+)$#',$path,$m)&&$method==='POST'&&($_POST['_method']??'')==='DELETE')$admin->destroyVideo((int)$m[1]);
 elseif(preg_match('#^/admin/videos/(\d+)$#',$path,$m)&&$method==='POST')$admin->saveVideo((int)$m[1]);
+elseif($path==='/admin/advertisements'&&$method==='GET')$admin->advertisements();
+elseif($path==='/admin/advertisements/create'&&$method==='GET')$admin->createAdvertisement();
+elseif($path==='/admin/advertisements'&&$method==='POST')$admin->saveAdvertisement();
+elseif(preg_match('#^/admin/advertisements/(\d+)/edit$#',$path,$m)&&$method==='GET')$admin->editAdvertisement((int)$m[1]);
+elseif(preg_match('#^/admin/advertisements/(\d+)$#',$path,$m)&&$method==='POST'&&($_POST['_method']??'')==='DELETE')$admin->destroyAdvertisement((int)$m[1]);
+elseif(preg_match('#^/admin/advertisements/(\d+)$#',$path,$m)&&$method==='POST')$admin->saveAdvertisement((int)$m[1]);
 elseif($path==='/admin/posts/create'&&$method==='GET')$admin->create();
 elseif($path==='/admin/posts'&&$method==='POST')$admin->store();
 elseif(preg_match('#^/admin/posts/(\d+)/edit$#',$path,$m)&&$method==='GET')$admin->edit((int)$m[1]);
@@ -55,4 +61,3 @@ elseif($path==='/eventos'&&$method==='GET')$site->events();
 elseif(preg_match('#^/video/(\d+)$#',$path,$m)&&$method==='GET')$site->video((int)$m[1]);
 elseif(preg_match('#^/categoria/([a-z0-9-]+)$#',$path,$m)&&$method==='GET')$site->category($m[1]);
 else{http_response_code(404);$site->notFound();}
-
