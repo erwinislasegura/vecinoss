@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 namespace App\Controllers;
-use App\Core\Controller; use App\Models\Category; use App\Models\Post; use App\Models\Setting; use App\Models\Video;
+use App\Core\Controller; use App\Models\Advertisement; use App\Models\Category; use App\Models\Post; use App\Models\Setting; use App\Models\Video;
 final class SiteController extends Controller
 {
     public function home(): void
@@ -25,6 +25,7 @@ final class SiteController extends Controller
             'weather' => Setting::weather(),
             'horoscope' => Setting::horoscope(),
             'videos' => Video::published(),
+            'advertisements' => Advertisement::published(6),
         ]);
     }
     public function search(): void
