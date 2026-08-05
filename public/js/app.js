@@ -260,3 +260,33 @@ document.querySelectorAll('[data-rich-editor]').forEach(editor => {
   canvas.addEventListener('input', sync);
   editor.closest('form')?.addEventListener('submit', sync);
 });
+
+document.querySelectorAll('[data-advertising-carousel]').forEach(carousel => {
+  const viewport = carousel.querySelector('.advertising-viewport');
+  const track = carousel.querySelector('[data-advertising-track]');
+  const cards = [...track.children];
+  if (!cards.length) return;
+  let index = 0;
+  let timer;
+  const visibleCount = () => window.matchMedia('(max-width:650px)').matches ? 1 : window.matchMedia('(max-width:900px)').matches ? 2 : 4;
+  const maxIndex = () => Math.max(0, cards.length - visibleCount());
+  const render = () => {
+    index = Math.min(maxIndex(), Math.max(0, index));
+    const cardWidth = cards[0].getBoundingClientRect().width;
+    const gap = Number.parseFloat(getComputedStyle(track).gap) || 0;
+    track.style.transform = `translate3d(-${index * (cardWidth + gap)}px,0,0)`;
+  };
+  const move = direction => { index = direction > 0 ? (index >= maxIndex() ? 0 : index + 1) : (index <= 0 ? maxIndex() : index - 1); render(); };
+  const start = () => { clearInterval(timer); if (cards.length > visibleCount() && !matchMedia('(prefers-reduced-motion:reduce)').matches) timer = setInterval(() => move(1), 4200); };
+  carousel.querySelector('[data-advertising-prev]')?.addEventListener('click', () => { move(-1); start(); });
+  carousel.querySelector('[data-advertising-next]')?.addEventListener('click', () => { move(1); start(); });
+  carousel.addEventListener('mouseenter', () => clearInterval(timer));
+  carousel.addEventListener('mouseleave', start);
+  carousel.addEventListener('focusin', () => clearInterval(timer));
+  carousel.addEventListener('focusout', start);
+  let touchStart = 0;
+  viewport.addEventListener('touchstart', event => { touchStart = event.touches[0].clientX; }, { passive: true });
+  viewport.addEventListener('touchend', event => { const distance = event.changedTouches[0].clientX - touchStart;if(Math.abs(distance)>40){move(distance<0?1:-1);start();} }, { passive: true });
+  addEventListener('resize', render, { passive: true });
+  render(); start();
+});
