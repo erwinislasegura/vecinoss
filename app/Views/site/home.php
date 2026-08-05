@@ -33,6 +33,15 @@ $shareTitle = 'VecinoSS — Noticias de la Provincia de San Antonio';
     </aside>
 </section>
 
+<?php if(!empty($advertisements)): ?>
+<section class="advertising-section" aria-labelledby="advertising-title" data-advertising-carousel>
+    <div class="shell advertising-heading"><div><small>ESPACIO PUBLICITARIO</small><h2 id="advertising-title">Publicidad</h2></div><div class="advertising-controls"><button type="button" data-advertising-prev aria-label="Anuncios anteriores">←</button><button type="button" data-advertising-next aria-label="Anuncios siguientes">→</button></div></div>
+    <div class="shell advertising-viewport"><div class="advertising-track" data-advertising-track>
+        <?php foreach($advertisements as $advertisement): ?><article class="advertising-card"><a href="<?= e($advertisement['target_url']) ?>" <?= (int)$advertisement['open_new_tab']===1?'target="_blank" rel="sponsored noopener"':'rel="sponsored"' ?> aria-label="<?= e($advertisement['name']) ?>"><img src="<?= e(post_image($advertisement['image'])) ?>" alt="<?= e($advertisement['alt_text']) ?>" loading="lazy"></a></article><?php endforeach; ?>
+    </div></div>
+</section>
+<?php endif; ?>
+
 <?php if (($weather['weather_enabled'] ?? '0') === '1'): ?>
 <section class="weather-section" aria-labelledby="weather-title">
     <div class="shell weather-widget" data-weather-widget data-latitude="<?= e($weather['weather_fallback_latitude']) ?>" data-longitude="<?= e($weather['weather_fallback_longitude']) ?>" data-fallback-name="<?= e($weather['weather_fallback_name']) ?>">
