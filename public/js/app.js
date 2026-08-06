@@ -268,7 +268,7 @@ document.querySelectorAll('[data-advertising-carousel]').forEach(carousel => {
   if (!cards.length) return;
   let index = 0;
   let timer;
-  const visibleCount = () => window.matchMedia('(max-width:650px)').matches ? 1 : window.matchMedia('(max-width:900px)').matches ? 2 : 4;
+  const visibleCount = () => window.matchMedia('(max-width:650px)').matches ? 3 : window.matchMedia('(max-width:900px)').matches ? 2 : 4;
   const maxIndex = () => Math.max(0, cards.length - visibleCount());
   const render = () => {
     index = Math.min(maxIndex(), Math.max(0, index));
