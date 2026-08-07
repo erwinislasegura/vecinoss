@@ -29,12 +29,12 @@ final class Setting
         'weather_fallback_latitude' => '-33.5933',
         'weather_fallback_longitude' => '-71.6217',
         'horoscope_enabled' => '1',
-        'horoscope_cta_eyebrow' => 'TU GUÍA DEL DÍA',
-        'horoscope_cta_title' => 'Horóscopo diario',
-        'horoscope_cta_text' => 'Descubre qué tienen preparado los astros para tu signo.',
+        'horoscope_cta_eyebrow' => 'TU GUÍA DE LA SEMANA',
+        'horoscope_cta_title' => 'Horóscopo semanal',
+        'horoscope_cta_text' => 'Descubre qué tienen preparado los astros para tu signo esta semana.',
         'horoscope_cta_button' => 'Ver mi horóscopo',
-        'horoscope_page_title' => 'Horóscopo de hoy',
-        'horoscope_page_intro' => 'Consulta las predicciones para los doce signos del zodiaco.',
+        'horoscope_page_title' => 'Horóscopo de la semana',
+        'horoscope_page_intro' => 'Consulta las predicciones semanales para los doce signos del zodiaco.',
         'horoscope_signs' => '',
     ];
     private const SOCIAL_DEFAULTS = [
@@ -76,6 +76,16 @@ final class Setting
         $rows = Database::connection()->query("SELECT setting_key, setting_value FROM settings WHERE setting_key LIKE 'horoscope_%'")->fetchAll();
         $values = array_column($rows, 'setting_value', 'setting_key');
         $settings = array_merge(self::DEFAULTS, $values);
+        $legacyDailyValues = [
+            'horoscope_cta_eyebrow' => ['TU GUÍA DEL DÍA', self::DEFAULTS['horoscope_cta_eyebrow']],
+            'horoscope_cta_title' => ['Horóscopo diario', self::DEFAULTS['horoscope_cta_title']],
+            'horoscope_cta_text' => ['Descubre qué tienen preparado los astros para tu signo.', self::DEFAULTS['horoscope_cta_text']],
+            'horoscope_page_title' => ['Horóscopo de hoy', self::DEFAULTS['horoscope_page_title']],
+            'horoscope_page_intro' => ['Consulta las predicciones para los doce signos del zodiaco.', self::DEFAULTS['horoscope_page_intro']],
+        ];
+        foreach ($legacyDailyValues as $key => [$oldValue, $weeklyValue]) {
+            if (($settings[$key] ?? '') === $oldValue) $settings[$key] = $weeklyValue;
+        }
         $settings['signs'] = self::decodeHoroscopeSigns($settings['horoscope_signs'] ?? '');
         return $settings;
     }

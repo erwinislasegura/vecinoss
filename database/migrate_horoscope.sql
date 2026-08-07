@@ -7,11 +7,11 @@ CREATE TABLE IF NOT EXISTS settings (
 
 INSERT INTO settings (setting_key, setting_value) VALUES
 ('horoscope_enabled', '1'),
-('horoscope_cta_eyebrow', 'TU GUÍA DEL DÍA'),
-('horoscope_cta_title', 'Horóscopo diario'),
-('horoscope_cta_text', 'Descubre qué tienen preparado los astros para tu signo.'),
+('horoscope_cta_eyebrow', 'TU GUÍA DE LA SEMANA'),
+('horoscope_cta_title', 'Horóscopo semanal'),
+('horoscope_cta_text', 'Descubre qué tienen preparado los astros para tu signo esta semana.'),
 ('horoscope_cta_button', 'Ver mi horóscopo'),
-('horoscope_page_title', 'Horóscopo de hoy'),
-('horoscope_page_intro', 'Consulta las predicciones para los doce signos del zodiaco.'),
+('horoscope_page_title', 'Horóscopo de la semana'),
+('horoscope_page_intro', 'Consulta las predicciones semanales para los doce signos del zodiaco.'),
 ('horoscope_signs', '')
 ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value);

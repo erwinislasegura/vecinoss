@@ -12,13 +12,13 @@
         <label>Introducción de la página<textarea name="horoscope_page_intro" rows="3" maxlength="300"><?= e($horoscope['horoscope_page_intro'] ?? '') ?></textarea></label>
 
         <div class="horoscope-sign-editor">
-            <h3>Predicciones por signo</h3>
-            <p>Actualiza el rango visible y el texto que se muestra en la página pública de horóscopo.</p>
+            <h3>Predicciones semanales por signo</h3>
+            <p>Actualiza el rango visible y la predicción semanal que se muestra en la página pública de horóscopo.</p>
             <?php foreach (($horoscope['signs'] ?? []) as $sign): ?>
                 <fieldset class="sign-config">
                     <legend><span aria-hidden="true"><?= e($sign['symbol'] ?? '') ?></span> <?= e($sign['name'] ?? '') ?></legend>
                     <label>Rango de fechas<input name="signs[<?= e($sign['key'] ?? '') ?>][range]" maxlength="40" value="<?= e($sign['range'] ?? '') ?>"></label>
-                    <label>Predicción<textarea name="signs[<?= e($sign['key'] ?? '') ?>][text]" rows="4" maxlength="500" required><?= e($sign['text'] ?? '') ?></textarea></label>
+                    <label>Predicción semanal<textarea name="signs[<?= e($sign['key'] ?? '') ?>][text]" rows="4" maxlength="500" required><?= e($sign['text'] ?? '') ?></textarea></label>
                 </fieldset>
             <?php endforeach; ?>
         </div>
